@@ -1,68 +1,66 @@
 <?php
-session_start();
-include 'db.php';
+require_once __DIR__ . '/db.php';
+
+// If already logged in, redirect straight to admin panel
+if (!empty($_SESSION['admin_logged_in'])) {
+    header("Location: admin.php");
+    exit;
+}
+
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    // Check admin table for username and password
-    $stmt = $conn->prepare("SELECT * FROM admin WHERE username=? AND password=? LIMIT 1");
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    if ($res->num_rows == 1) {
-        $_SESSION['admin_logged_in'] = true;
-        header("Location: admin.php");
-        exit;
+    if ($username === '' || $password === '') {
+        $error = "Please enter both username and password.";
     } else {
-        $error = "Username or password is incorrect";
+        // Query admin by username
+        $stmt = $conn->prepare("SELECT id, username, password FROM admin WHERE username = ? LIMIT 1");
+        if ($stmt) {
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $res = $stmt->get_result();
+
+            if ($row = $res->fetch_assoc()) {
+                // Verify hashed password or allow legacy plain-text match
+                if (password_verify($password, $row['password']) || $password === $row['password']) {
+                    $_SESSION['admin_logged_in'] = true;
+                    $_SESSION['admin_username'] = $row['username'];
+                    header("Location: admin.php");
+                    exit;
+                } else {
+                    $error = "Username or password is incorrect";
+                }
+            } else {
+                $error = "Username or password is incorrect";
+            }
+            $stmt->close();
+        } else {
+            $error = "Database query error: " . $conn->error;
+        }
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Login</title>
-  <link rel="stylesheet" href="/exam_seating/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Exam Seating Arrangement</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    /* Center body */
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #89f7fe, #66a6ff);
     }
 
-    
-   
-    /* --- Buttons --- */
-    button {
-      background: linear-gradient(135deg, #007bff, #0056d2);
-      border: none;
-      color: white;
-      padding: 12px 35px;
-      font-size: 16px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      margin-top: 15px;
-    }
-
-    button:hover {
-      background: linear-gradient(135deg, #0056d2, #0041a8);
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-    }
-
-    /* --- Back Button --- */
     .back-button {
       position: absolute;
       top: 20px;
@@ -70,132 +68,150 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       display: flex;
       align-items: center;
       text-decoration: none;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       color: #333;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 16px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      transition: background 0.3s, box-shadow 0.3s;
+      transition: all 0.3s ease;
     }
 
     .back-button svg {
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
       fill: #333;
-      transition: fill 0.2s;
     }
 
     .back-button:hover {
       background: #fff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
       color: #000;
+      transform: translateY(-2px);
     }
 
-    .back-button:hover svg {
-      fill: #000;
-    }
-
-    /* Login card */
     .login-card {
       background: white;
-      padding: 30px 40px;
+      padding: 40px;
       border-radius: 15px;
       box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 320px;
+      width: 340px;
       text-align: center;
     }
 
     .login-card h1 {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-size: 1.8em;
       color: #333;
     }
 
-    /* Form */
     .login-form {
       display: flex;
       flex-direction: column;
-      width: 100%;
       gap: 15px;
+      text-align: left;
     }
 
-    .form-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .login-form label {
+      font-weight: 600;
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 4px;
+      display: block;
     }
 
-    .form-row input {
-      width: 150px;
-      padding: 6px;
-      font-size: 1em;
+    .login-form input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
     }
 
-    /* Button row */
-    .button-row {
-      display: flex;
-      justify-content: center;
+    .login-form input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
     }
 
-    .button-row button {
-      padding: 8px 20px;
-      font-size: 1em;
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
       cursor: pointer;
-      border-radius: 6px;
-      background: linear-gradient(45deg, #ff6a00, #ee0979);
+      border-radius: 25px;
+      background: linear-gradient(135deg, #007bff, #0056d2);
       color: white;
       border: none;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: all 0.2s;
+      margin-top: 10px;
     }
 
-    .button-row button:hover {
+    .login-btn:hover {
+      background: linear-gradient(135deg, #0056d2, #0041a8);
       transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(0,0,0,0.25);
     }
 
     .error-msg {
-      color: red;
-      margin-bottom: 10px;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .setup-link {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .setup-link a {
+      color: #007bff;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Back button -->
-  <a href="http://localhost/exam_seating/" class="back-button">
+  <!-- Dynamic Back button to Home -->
+  <a href="index.php" class="back-button">
     <svg viewBox="0 0 24 24">
       <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
     </svg>
-    Back
+    Home
   </a>
 
   <div class="login-card">
     <h1>Admin Login</h1>
 
-    <?php if($error) echo "<p class='error-msg'>$error</p>"; ?>
+    <?php if ($error): ?>
+      <div class="error-msg"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
 
     <form method="POST" class="login-form">
-      <div class="form-row">
-        <label>Username:</label>
-        <input type="text" name="username" required>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
       </div>
 
-      <div class="form-row">
-        <label>Password:</label>
-        <input type="password" name="password" required>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
       </div>
 
-      <div class="button-row">
-        <button type="submit">Login</button>
-      </div>
+      <button type="submit" class="login-btn">Login</button>
     </form>
+
+    <div class="setup-link">
+      Need to set up the database? <a href="setup.php">Click here</a>
+    </div>
   </div>
 
 </body>

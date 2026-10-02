@@ -1,15 +1,17 @@
+<?php
+require_once __DIR__ . '/config.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome | Exam Seating Arrangement</title>
+  <title>Welcome | Exam Seating Arrangement System</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Page background */
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,73 +19,98 @@
       background: linear-gradient(135deg, #89f7fe, #66a6ff);
     }
 
-    /* Card-style container */
-    .center {
+    .card {
       background: #ffffff;
-      padding: 50px 70px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      padding: 50px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-width: 480px;
+      width: 90%;
+      animation: fadeIn 0.8s ease-in-out;
     }
 
-    .center:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Heading */
     h1 {
       color: #333;
-      margin-bottom: 30px;
-      font-size: 28px;
+      margin-bottom: 15px;
+      font-size: 26px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
     }
 
-    /* Button styling */
-    button {
+    p.subtitle {
+      color: #666;
+      font-size: 15px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .main-btn {
       background: linear-gradient(135deg, #007bff, #0056d2);
       border: none;
       color: white;
-      padding: 12px 35px;
+      padding: 13px 36px;
       font-size: 16px;
+      font-weight: 600;
       border-radius: 30px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+      display: inline-block;
+      width: 80%;
+      box-sizing: border-box;
     }
 
-    button:hover {
+    .main-btn:hover {
       background: linear-gradient(135deg, #0056d2, #0041a8);
-      transform: scale(1.05);
+      transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
     }
 
-    /* Footer (optional for college project look) */
-    footer {
-      position: absolute;
-      bottom: 20px;
-      text-align: center;
-      width: 100%;
-      color: #fff;
+    .setup-btn {
+      background: #6c757d;
+      color: white;
+      padding: 10px 25px;
       font-size: 14px;
-      opacity: 0.9;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: background 0.3s;
+      display: inline-block;
     }
 
-    footer span {
-      font-weight: bold;
+    .setup-btn:hover {
+      background: #5a6268;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="center">
-  <h1>Welcome to Exam Seating Arrangement</h1>
-  <a href="exam_seating.php"><button>Admin Login</button></a>
-  
-</div>
-
-
-
+  <div class="card">
+    <h1>Exam Seating Arrangement System</h1>
+    <p class="subtitle">Automated seating plan generator for examination centers and institutions.</p>
+    
+    <div class="btn-group">
+      <?php if (!empty($_SESSION['admin_logged_in'])): ?>
+        <a href="admin.php" class="main-btn">Go to Admin Dashboard</a>
+        <a href="logout.php" style="color: #dc3545; font-size: 14px; text-decoration: none;">Logout</a>
+      <?php else: ?>
+        <a href="exam_seating.php" class="main-btn">Admin Login</a>
+        <a href="setup.php" class="setup-btn">Database Setup & Installer</a>
+      <?php endif; ?>
+    </div>
+  </div>
 </body>
 </html>

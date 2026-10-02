@@ -1,278 +1,383 @@
 <?php
-include 'db.php';
+require_once __DIR__ . '/db.php';
 
-$year = $_POST['year'];
-$exam_date = $_POST['exam_date'];
+// Authentication check
+if (empty($_SESSION['admin_logged_in'])) {
+    header("Location: exam_seating.php");
+    exit;
+}
 
-// Clear previous seating
+// Redirect back to admin if accessed directly without POST data
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['year']) || empty($_POST['exam_date'])) {
+    header("Location: admin.php");
+    exit;
+}
+
+$year = trim($_POST['year']);
+$exam_date = trim($_POST['exam_date']);
+
+// Clear previous seating arrangement
 $conn->query("DELETE FROM seating");
 
-// Fetch students of selected year ordered by branch and roll_no
-$result = $conn->query("SELECT * FROM students WHERE year='$year' ORDER BY branch, roll_no");
+// Fetch students of selected year ordered by branch and roll_no using prepared statement
+$stmtStudents = $conn->prepare("SELECT roll_no, branch FROM students WHERE year = ? ORDER BY branch ASC, roll_no ASC");
+$stmtStudents->bind_param("s", $year);
+$stmtStudents->execute();
+$resStudents = $stmtStudents->get_result();
+
 $students = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $resStudents->fetch_assoc()) {
     $students[$row['branch']][] = $row['roll_no'];
 }
+$stmtStudents->close();
 $branches = array_keys($students);
 
 // Fetch subjects for each branch on this exam date
+$stmtExams = $conn->prepare("SELECT branch, subject FROM exams WHERE year = ? AND exam_date = ?");
+$stmtExams->bind_param("ss", $year, $exam_date);
+$stmtExams->execute();
+$resExams = $stmtExams->get_result();
+
 $branch_subjects = [];
-$res = $conn->query("SELECT branch, subject FROM exams WHERE year='$year' AND exam_date='$exam_date'");
-while ($r = $res->fetch_assoc()) {
+while ($r = $resExams->fetch_assoc()) {
     $branch_subjects[$r['branch']] = $r['subject'];
 }
+$stmtExams->close();
 
 // Fetch rooms for this year
-$result = $conn->query("SELECT * FROM rooms WHERE year='$year' ORDER BY room_no");
+$stmtRooms = $conn->prepare("SELECT room_no, capacity FROM rooms WHERE year = ? ORDER BY room_no ASC");
+$stmtRooms->bind_param("s", $year);
+$stmtRooms->execute();
+$resRooms = $stmtRooms->get_result();
+
 $rooms = [];
-while ($row = $result->fetch_assoc()) {
+while ($row = $resRooms->fetch_assoc()) {
     $rooms[] = $row;
 }
+$stmtRooms->close();
 
 $seating = [];
 $room_index = 0;
+$no_students = empty(array_filter($students));
+$no_rooms = empty($rooms);
 
-// Loop until all students are seated or rooms are full
-while (!empty(array_filter($students)) && $room_index < count($rooms)) {
-    $room = $rooms[$room_index];
-    $half_capacity = floor($room['capacity'] / 2);
+if (!$no_students && !$no_rooms) {
+    // Loop until all students are seated or rooms are full
+    while (!empty(array_filter($students)) && $room_index < count($rooms)) {
+        $room = $rooms[$room_index];
+        $half_capacity = (int)floor($room['capacity'] / 2);
+        if ($half_capacity < 1) $half_capacity = 1;
 
-    // ----- LEFT SIDE -----
-    $branchA = array_key_first(array_filter($students));
-    $rollsA = array_splice($students[$branchA], 0, $half_capacity);
-    $left_filled = false;
+        // ----- LEFT SIDE -----
+        $activeStudents = array_filter($students);
+        $branchA = array_key_first($activeStudents);
+        $rollsA = !empty($branchA) ? array_splice($students[$branchA], 0, $half_capacity) : [];
+        $left_filled = false;
 
-    if (!empty($rollsA)) {
-        $seating[] = [
-            'branch' => $branchA,
-            'roll_range' => reset($rollsA) . '-' . end($rollsA),
-            'room_no' => $room['room_no'],
-            'capacity' => count($rollsA),
-            'column_side' => 'Left'
-        ];
-        $left_filled = true;
-    }
-
-    // ----- RIGHT SIDE -----
-    $subA = $branch_subjects[$branchA] ?? '';
-    $branchB = null;
-
-    foreach ($branches as $b) {
-        if (!empty($students[$b]) && ($branch_subjects[$b] ?? '') != $subA && $b != $branchA) {
-            $branchB = $b;
-            break;
-        }
-    }
-
-    $right_filled = false;
-    if ($branchB) {
-        $rollsB = array_splice($students[$branchB], 0, $half_capacity);
-        if (!empty($rollsB)) {
+        if (!empty($rollsA)) {
             $seating[] = [
-                'branch' => $branchB,
-                'roll_range' => reset($rollsB) . '-' . end($rollsB),
+                'branch' => $branchA,
+                'roll_range' => reset($rollsA) . ' - ' . end($rollsA),
                 'room_no' => $room['room_no'],
-                'capacity' => count($rollsB),
-                'column_side' => 'Right'
+                'capacity' => count($rollsA),
+                'column_side' => 'Left'
             ];
-            $right_filled = true;
+            $left_filled = true;
         }
-    }
 
-    if (!$left_filled && !$right_filled) {
+        // ----- RIGHT SIDE -----
+        $subA = $branch_subjects[$branchA] ?? '';
+        $branchB = null;
+
+        foreach ($branches as $b) {
+            if (!empty($students[$b]) && ($branch_subjects[$b] ?? '') !== $subA && $b !== $branchA) {
+                $branchB = $b;
+                break;
+            }
+        }
+
+        // If no alternate branch found, fill with remaining students from any branch
+        if (!$branchB) {
+            foreach ($branches as $b) {
+                if (!empty($students[$b]) && $b !== $branchA) {
+                    $branchB = $b;
+                    break;
+                }
+            }
+        }
+
+        $right_filled = false;
+        if ($branchB) {
+            $rollsB = array_splice($students[$branchB], 0, $half_capacity);
+            if (!empty($rollsB)) {
+                $seating[] = [
+                    'branch' => $branchB,
+                    'roll_range' => reset($rollsB) . ' - ' . end($rollsB),
+                    'room_no' => $room['room_no'],
+                    'capacity' => count($rollsB),
+                    'column_side' => 'Right'
+                ];
+                $right_filled = true;
+            }
+        }
+
+        if (!$left_filled && !$right_filled) {
+            $room_index++;
+            continue;
+        }
+
         $room_index++;
-        continue;
     }
-
-    $room_index++;
 }
 
-// Warn if students remain unseated
+// Check if any students remain unseated
 $remaining = [];
 foreach ($students as $br => $rolls) {
-    if (!empty($rolls)) $remaining[$br] = count($rolls);
+    if (!empty($rolls)) {
+        $remaining[$br] = count($rolls);
+    }
 }
 
+// Insert generated seating into database using prepared statement
+if (!empty($seating)) {
+    $stmtInsert = $conn->prepare("INSERT INTO seating (branch, roll_range, room_no, capacity, column_side) VALUES (?, ?, ?, ?, ?)");
+    foreach ($seating as $s) {
+        $stmtInsert->bind_param("sssis", $s['branch'], $s['roll_range'], $s['room_no'], $s['capacity'], $s['column_side']);
+        $stmtInsert->execute();
+    }
+    $stmtInsert->close();
+}
+
+$formatted_date = date("d-m-Y", strtotime($exam_date));
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Seating Generated</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Seating Arrangement</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      min-height: 100vh;
       text-align: center;
-      padding: 40px;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
     h2 {
       color: #222;
-      font-size: 26px;
-      margin-bottom: 30px;
+      font-size: 24px;
+      margin-bottom: 25px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
-    h3 {
-      color: red;
+    .meta-badge {
+      display: inline-block;
+      background: #e9ecef;
+      color: #495057;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
       margin-bottom: 20px;
     }
 
+    .warning-box {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
     table {
-      margin: 0 auto;
-      background: #fff;
+      width: 100%;
       border-collapse: collapse;
-      border-radius: 12px;
+      margin: 20px 0;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      width: 80%;
-      max-width: 900px;
     }
 
     th, td {
-      padding: 15px 20px;
-      border-bottom: 1px solid #ddd;
-      font-size: 16px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 15px;
+      text-align: center;
     }
 
     th {
       background: linear-gradient(135deg, #007bff, #0056d2);
       color: white;
       text-transform: uppercase;
+      font-size: 14px;
       letter-spacing: 0.5px;
     }
 
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
     tr:hover {
-      background-color: #f2f7ff;
+      background-color: #e9f2ff;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    .side-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
     }
-    /* --- Back Button --- */
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+
+    .side-left { background: #e3f2fd; color: #0d47a1; }
+    .side-right { background: #fce4ec; color: #880e4f; }
+
+    .action-buttons {
+      margin-top: 30px;
       display: flex;
-      align-items: center;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 8px 14px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      transition: background 0.3s, box-shadow 0.3s;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
-    .back-button svg {
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-      fill: #333;
-      transition: fill 0.2s;
-    }
- .back-button:hover {
-      background: #fff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-      color: #000;
-    }
-
-    .back-button:hover svg {
-      fill: #000;
-    }
-
-    button {
-      background: linear-gradient(135deg, #007bff, #0056d2);
-      border: none;
-      color: white;
-      padding: 12px 35px;
-      font-size: 16px;
-      border-radius: 30px;
+    .btn {
+      padding: 12px 28px;
+      font-size: 15px;
+      border-radius: 25px;
       cursor: pointer;
+      border: none;
+      text-decoration: none;
+      font-weight: 600;
       transition: all 0.3s ease;
-      margin: 20px 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: inline-block;
     }
 
-    button:hover {
-      background: linear-gradient(135deg, #0056d2, #0041a8);
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    .btn-primary {
+      background: linear-gradient(135deg, #007bff, #0056d2);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
     }
 
-    footer {
-      margin-top: 40px;
-      color: #fff;
-      opacity: 0.9;
-      font-size: 14px;
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
     }
 
-    footer span {
-      font-weight: bold;
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      .action-buttons, .back-button {
+        display: none !important;
+      }
+      th {
+        background: #333 !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
     }
   </style>
 </head>
 <body>
- <!-- Back button -->
-  <a href="http://localhost/exam_seating/admin.php" class="back-button">
-    <svg viewBox="0 0 24 24">
-      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-    </svg>
-    Back
-  </a>
 
-<?php
-if (!empty($remaining)) {
-    echo "<h3>⚠ Rooms are filled but some students remain unseated!</h3>";
-    echo "<pre style='text-align:center; background:#fff; display:inline-block; padding:10px 20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);'>";
-    print_r($remaining);
-    echo "</pre>";
-}
+  <div class="container">
+    <h2>Examination Seating Arrangement</h2>
+    <div class="meta-badge">
+      Year: <?php echo htmlspecialchars($year); ?> | Date: <?php echo htmlspecialchars($formatted_date); ?>
+    </div>
 
-// Insert seating into DB
-foreach ($seating as $s) {
-    $conn->query("INSERT INTO seating (branch, roll_range, room_no, capacity, column_side)
-        VALUES ('{$s['branch']}', '{$s['roll_range']}', '{$s['room_no']}', '{$s['capacity']}', '{$s['column_side']}')");
-}
-// Format the date as dd-mm-yyyy for display
-$formatted_date = date("d-m-Y", strtotime($exam_date));
-echo "<h2>Seating Generated for Year $year on $formatted_date</h2>";
+    <?php if ($no_students): ?>
+      <div class="warning-box">
+        <strong>Notice:</strong> No registered students found for Year <?php echo htmlspecialchars($year); ?>. Please add student data.
+      </div>
+    <?php elseif ($no_rooms): ?>
+      <div class="warning-box">
+        <strong>Notice:</strong> No examination rooms found for Year <?php echo htmlspecialchars($year); ?>. Please configure rooms.
+      </div>
+    <?php endif; ?>
 
+    <?php if (!empty($remaining)): ?>
+      <div class="warning-box">
+        <strong>Warning:</strong> Available room capacity was insufficient for all students. Unseated counts:
+        <ul style="margin: 8px 0 0 20px; padding: 0;">
+          <?php foreach ($remaining as $br => $cnt): ?>
+            <li>Branch <strong><?php echo htmlspecialchars($br); ?></strong>: <?php echo htmlspecialchars((string)$cnt); ?> student(s) unseated</li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    <?php endif; ?>
 
-$res = $conn->query("SELECT branch, roll_range, room_no, capacity, column_side 
-                     FROM seating 
-                     WHERE branch != '---'
-                     ORDER BY branch, room_no, column_side");
+    <?php
+    $resSeating = $conn->query("SELECT branch, roll_range, room_no, capacity, column_side FROM seating ORDER BY room_no ASC, column_side ASC");
+    if ($resSeating && $resSeating->num_rows > 0):
+    ?>
+      <table>
+        <thead>
+          <tr>
+            <th>Room No</th>
+            <th>Side</th>
+            <th>Branch</th>
+            <th>Roll Range</th>
+            <th>Students Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while ($row = $resSeating->fetch_assoc()): ?>
+            <tr>
+              <td><strong><?php echo htmlspecialchars($row['room_no']); ?></strong></td>
+              <td>
+                <span class="side-badge <?php echo $row['column_side'] === 'Left' ? 'side-left' : 'side-right'; ?>">
+                  <?php echo htmlspecialchars($row['column_side']); ?>
+                </span>
+              </td>
+              <td><?php echo htmlspecialchars($row['branch']); ?></td>
+              <td><?php echo htmlspecialchars($row['roll_range']); ?></td>
+              <td><?php echo htmlspecialchars((string)$row['capacity']); ?></td>
+            </tr>
+          <?php endwhile; ?>
+        </tbody>
+      </table>
+    <?php elseif (!$no_students && !$no_rooms): ?>
+      <p>No seating arrangement could be generated. Please verify rooms and branch schedules.</p>
+    <?php endif; ?>
 
-echo "<table>
-      <tr>
-        <th>Branch</th>
-        <th>Room No</th>
-        <th>Roll Range</th>
-        <th>No. of Students</th>
-      </tr>";
-
-while ($row = $res->fetch_assoc()) {
-    echo "<tr>
-        <td>{$row['branch']}</td>
-        <td>{$row['room_no']}</td>
-        <td>{$row['roll_range']}</td>
-        <td>{$row['capacity']}</td>
-    </tr>";
-}
-
-echo "</table>";
-
-echo "<button onclick='window.print()'>Print Seating</button>";
-echo "<button onclick=\"window.location='admin.php'\">Cancel</button>";
-?>
-
+    <div class="action-buttons">
+      <button onclick="window.print()" class="btn btn-primary">Print Seating Plan</button>
+      <a href="admin.php" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
 
 </body>
 </html>

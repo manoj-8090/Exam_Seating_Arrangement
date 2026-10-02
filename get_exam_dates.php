@@ -1,24 +1,46 @@
 <?php
-include 'db.php';
+/**
+ * AJAX Endpoint: Fetch Exam Dates for a given Year
+ */
+require_once __DIR__ . '/db.php';
 
-$year = $_GET['year'];
+$year = trim($_GET['year'] ?? '');
 
-// Fetch distinct exam dates for the selected year (formatted as dd-mm-yyyy)
-$query = "
+echo "<option value=''>--Select Exam Date--</option>";
+
+if ($year === '') {
+    exit;
+}
+
+// Use prepared statement to prevent SQL Injection
+$stmt = $conn->prepare("
     SELECT DISTINCT 
         exam_date, 
         DATE_FORMAT(exam_date, '%d-%m-%Y') AS formatted_date 
     FROM exams 
-    WHERE year = '$year' 
-    ORDER BY exam_date
-";
+    WHERE year = ? 
+    ORDER BY exam_date ASC
+");
 
-$result = $conn->query($query);
+if ($stmt) {
+    $stmt->bind_param("s", $year);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-echo "<option value=''>--Select Exam Date--</option>";
+    $found = false;
+    while ($row = $result->fetch_assoc()) {
+        $found = true;
+        $val = htmlspecialchars($row['exam_date']);
+        $lbl = htmlspecialchars($row['formatted_date'] ?: $row['exam_date']);
+        echo "<option value='{$val}'>{$lbl}</option>";
+    }
 
-while ($row = $result->fetch_assoc()) {
-    // Use the real DB value in 'value' and formatted one as label
-    echo "<option value='{$row['exam_date']}'>{$row['formatted_date']}</option>";
+    if (!$found) {
+        echo "<option value='' disabled>No exams scheduled for this year</option>";
+    }
+
+    $stmt->close();
+} else {
+    echo "<option value='' disabled>Error loading dates</option>";
 }
 ?>
