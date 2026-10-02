@@ -60,6 +60,8 @@ server.listen(PORT, () => {
   console.log(`Press Ctrl+C to stop.`);
   console.log(`==================================================\n`);
 
-  // Open default browser on Windows
-  exec(`start ${url}`);
+  // Open default browser on Windows local development
+  if (process.platform === 'win32' && !process.env.RENDER) {
+    exec(`start ${url}`);
+  }
 });

@@ -1,0 +1,19 @@
+{
+  "name": "exam-seating-arrangement",
+  "version": "1.0.0",
+  "description": "College Examination Seating & Timetable System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "exam-seating",
+    "timetable",
+    "college"
+  ],
+  "author": "Manoj Kumar",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
