@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Seating & Timetable Portal | Exam Arrangement</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #333;
+      padding: 30px 15px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .portal-header {
+      background: linear-gradient(135deg, #00a389, #007a66);
+      color: white;
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .portal-header h1 {
+      margin: 0;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .home-link {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .home-link:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .content-body {
+      padding: 35px;
+    }
+
+    /* Search Box */
+    .search-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .search-card h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      color: #1e293b;
+    }
+
+    .search-card p {
+      margin: 0 0 20px 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .search-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 16px;
+      border: 2px solid #cbd5e1;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .search-input:focus {
+      border-color: #00a389;
+      box-shadow: 0 0 8px rgba(0, 163, 137, 0.3);
+    }
+
+    .search-btn {
+      background: linear-gradient(135deg, #00a389, #007a66);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 163, 137, 0.35);
+    }
+
+    .quick-tags {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .quick-tag {
+      display: inline-block;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 2px;
+      font-weight: 600;
+    }
+
+    .quick-tag:hover {
+      background: #cbd5e1;
+    }
+
+    /* Result Section */
+    #resultSection {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .hall-ticket-card {
+      border: 2px dashed #00a389;
+      border-radius: 12px;
+      padding: 25px;
+      background: #f0fdf4;
+      margin-bottom: 30px;
+    }
+
+    .ticket-header {
+      border-bottom: 2px solid #bbf7d0;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ticket-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #166534;
+      text-transform: uppercase;
+    }
+
+    .student-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .meta-box {
+      background: #fff;
+      border: 1px solid #dcfce7;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .meta-box span {
+      font-size: 12px;
+      color: #6b7280;
+      display: block;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .meta-box strong {
+      font-size: 15px;
+      color: #1f2937;
+    }
+
+    .allotment-highlight {
+      background: #ffffff;
+      border: 2px solid #00a389;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .allotment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .highlight-item h4 {
+      margin: 0;
+      font-size: 13px;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .highlight-item div {
+      font-size: 20px;
+      font-weight: 700;
+      color: #007a66;
+      margin-top: 4px;
+    }
+
+    /* Timetable Table */
+    .section-title {
+      font-size: 18px;
+      color: #1e293b;
+      margin: 25px 0 12px 0;
+      border-left: 4px solid #00a389;
+      padding-left: 10px;
+      text-transform: uppercase;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table th, table td {
+      padding: 12px 15px;
+      border: 1px solid #e2e8f0;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    table th {
+      background: #00a389;
+      color: white;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .badge-session {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .action-row {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .btn-print {
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-print:hover {
+      background: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; }
+      .search-card, .home-link, .action-row { display: none !important; }
+      .hall-ticket-card { border: 1px solid #000; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="portal-header">
+      <h1>Student Examination & Seating Slip</h1>
+      <a href="index.html" class="home-link">&larr; Back to Home</a>
+    </div>
+
+    <div class="content-body">
+      <!-- Search Card -->
+      <div class="search-card">
+        <h2>Find Your Exam Seating Allotment</h2>
+        <p>Enter your College Roll Number to check your allocated Exam Hall, Bench & Seat details.</p>
+        
+        <form id="searchForm" class="search-form">
+          <input type="text" id="rollInput" class="search-input" placeholder="e.g. 24CS01, 23CS05, 22EC01" required autocomplete="off">
+          <button type="submit" class="search-btn">Search Seating</button>
+        </form>
+
+        <div class="quick-tags">
+          Try sample roll numbers: 
+          <span class="quick-tag" onclick="quickFill('24CS01')">24CS01 (1st Yr CSE)</span>
+          <span class="quick-tag" onclick="quickFill('23CS05')">23CS05 (2nd Yr CSE)</span>
+          <span class="quick-tag" onclick="quickFill('22EC02')">22EC02 (3rd Yr ECE)</span>
+          <span class="quick-tag" onclick="quickFill('21ME03')">21ME03 (4th Yr MECH)</span>
+        </div>
+      </div>
+
+      <!-- Result Container -->
+      <div id="resultSection">
+        <div class="hall-ticket-card">
+          <div class="ticket-header">
+            <h3>Official Seating Allotment Pass</h3>
+            <span style="font-size: 13px; color: #166534; font-weight: bold;">Status: Allotted &#10004;</span>
+          </div>
+
+          <div class="student-meta-grid">
+            <div class="meta-box">
+              <span>Student Name</span>
+              <strong id="resName">-</strong>
+            </div>
+            <div class="meta-box">
+              <span>Roll Number</span>
+              <strong id="resRoll">-</strong>
+            </div>
+            <div class="meta-box">
+              <span>Academic Year</span>
+              <strong id="resYear">-</strong>
+            </div>
+            <div class="meta-box">
+              <span>Branch / Dept</span>
+              <strong id="resBranch">-</strong>
+            </div>
+          </div>
+
+          <div class="allotment-highlight">
+            <h4 style="margin: 0; color: #007a66; text-transform: uppercase;">Upcoming Exam Allotment Details</h4>
+            <div class="allotment-grid">
+              <div class="highlight-item">
+                <h4>Exam Hall / Room</h4>
+                <div id="resRoom">-</div>
+              </div>
+              <div class="highlight-item">
+                <h4>Building / Block</h4>
+                <div id="resBlock">-</div>
+              </div>
+              <div class="highlight-item">
+                <h4>Bench Column</h4>
+                <div id="resColumn">-</div>
+              </div>
+              <div class="highlight-item">
+                <h4>Assigned Seat #</h4>
+                <div id="resSeat">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="section-title">Your Scheduled Exam Timetable</h3>
+        <table id="timetableTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Session / Timing</th>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+            </tr>
+          </thead>
+          <tbody id="timetableBody"></tbody>
+        </table>
+
+        <div class="action-row">
+          <button onclick="window.print()" class="btn-print">Print Seating Pass</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function quickFill(roll) {
+      document.getElementById('rollInput').value = roll;
+      doSearch(roll);
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const roll = document.getElementById('rollInput').value.trim();
+      doSearch(roll);
+    });
+
+    function doSearch(roll) {
+      const res = lookupStudentSeating(roll);
+      const resSection = document.getElementById('resultSection');
+
+      if (!res.found) {
+        alert(res.message);
+        resSection.style.display = 'none';
+        return;
+      }
+
+      // Populate student details
+      document.getElementById('resName').textContent = res.student.name;
+      document.getElementById('resRoll').textContent = res.student.roll_no;
+      document.getElementById('resYear').textContent = `Year ${res.student.year}`;
+      document.getElementById('resBranch').textContent = res.student.branch;
+
+      // Populate seating allotment if available
+      if (res.seatings && res.seatings.length > 0) {
+        const primary = res.seatings[0];
+        document.getElementById('resRoom').textContent = primary.room_no;
+        document.getElementById('resBlock').textContent = primary.block || 'Academic Block';
+        document.getElementById('resColumn').textContent = primary.column;
+        document.getElementById('resSeat').textContent = primary.seat_no;
+      } else {
+        document.getElementById('resRoom').textContent = 'Pending Schedule';
+        document.getElementById('resBlock').textContent = 'Check with Admin';
+        document.getElementById('resColumn').textContent = 'N/A';
+        document.getElementById('resSeat').textContent = 'N/A';
+      }
+
+      // Populate timetable
+      const tbody = document.getElementById('timetableBody');
+      tbody.innerHTML = '';
+      if (res.timetable && res.timetable.length > 0) {
+        res.timetable.forEach(t => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${formatDisplayDate(t.exam_date)}</strong></td>
+            <td><span class="badge-session">${t.session}</span></td>
+            <td><code>${t.subject_code}</code></td>
+            <td>${t.subject}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        tbody.innerHTML = '<tr><td colspan="4">No exams scheduled for this branch yet.</td></tr>';
+      }
+
+      resSection.style.display = 'block';
+      resSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

@@ -1,66 +1,52 @@
-# Exam Seating Arrangement System
+# College Examination Seating Arrangement & Timetable System
 
-A modern web-based application built to automate and optimize the process of assigning examination seats to students across halls and classrooms.
+A comprehensive web-based application built to automate and optimize the process of assigning examination seats across halls and classrooms for **all academic years (1st, 2nd, 3rd, and 4th Year)** and multiple branches (CSE, ECE, MECH, IT).
+
+---
+
+## Portals & Core Features
+
+### 1. Student Portal (`student.html`)
+- **Roll Number Search**: Students enter their roll number (e.g., `24CS01`, `23CS05`, `22EC02`, `21ME03`) to find their exam allotment.
+- **Instant Hall Ticket**: Displays Allocated Room Number, Building Block, Column / Side, Seat Number, Exam Date, and Timing.
+- **Student Timetable**: Full view of scheduled examinations, subject codes, and timings.
+- **Printable Pass**: One-click printing of student seating passes.
+
+### 2. Examination Controller Dashboard (`admin.html`)
+- **Multi-Year Seating Generator**:
+  - Automatically alternates benches across years and branches so adjacent students never share an exam paper.
+  - Generates room-wise roll ranges, counts, and individual seat allocations.
+- **Classroom Management**:
+  - Add, view, and delete exam halls and classrooms with capacities and bench counts.
+- **Timetable Scheduling**:
+  - Schedule exams by Date, Session (Morning/Afternoon), Year, Branch, Subject Code, and Subject Name.
+- **Student Roster Management**:
+  - Year-wise breakdown (1st to 4th Year) and search capabilities.
+- **System Reset**:
+  - Instant one-click restore of realistic college sample datasets (200+ students, 20 exams, 5 halls).
 
 ---
 
 ## Multiple Ways to Run (No XAMPP Required!)
 
-You can run this project **immediately** without installing XAMPP, Apache, or MySQL:
+### Option 1: Press `F5` in VS Code
+Press **`F5`** in VS Code (or click **Run** &rarr; **Start Debugging**). The server starts and launches your browser automatically at `http://localhost:3000`.
 
-### 1. In VS Code with "Live Server" (Zero Installation)
-1. Open this folder in VS Code:
-   ```bash
-   code "C:\Users\manoj\Desktop\seating\Exam-Seating-Arrangement"
-   ```
-2. Right-click [index.html](file:///C:/Users/manoj/Desktop/seating/Exam-Seating-Arrangement/index.html) and select **Open with Live Server**.
-3. That's it! The application opens directly in your browser.
+### Option 2: Live Server in VS Code
+Right-click **[index.html](file:///C:/Users/manoj/Desktop/seating/Exam-Seating-Arrangement/index.html)** in the VS Code file explorer and click **Open with Live Server**.
 
----
+### Option 3: Double-Click Launcher (`start.bat`)
+Double-click **`start.bat`** in the project folder to start the server and open your default browser.
 
-### 2. Double-Click Launcher (`start.bat`)
-Just double-click **`start.bat`** in the folder. It will start a local server using your installed Node.js or Python and immediately open your browser to `http://localhost:3000` (or `8000`).
-
----
-
-### 3. Run with Node.js
-If you have Node.js installed:
+### Option 4: Terminal Command
+Run either:
 ```bash
 node server.js
 ```
-The server starts at `http://localhost:3000` and automatically opens in your default browser. (No `npm install` needed).
-
----
-
-### 4. Run with Python
-If you have Python installed:
+or
 ```bash
 python server.py
 ```
-The server starts at `http://localhost:8000` and automatically opens in your browser.
-
----
-
-### 5. Classic PHP / MySQL Stack (Optional - for XAMPP / Production)
-If you prefer running the PHP/MySQL backend:
-1. Start Apache & MySQL in **XAMPP**.
-2. Run the one-click installer in your browser:
-   ```
-   http://localhost/Exam-Seating-Arrangement/setup.php
-   ```
-3. Click **Initialize Database Now** to automatically create the database and seed tables.
-4. Access the PHP app at `http://localhost/Exam-Seating-Arrangement/index.php`.
-
----
-
-## Features
-
-- **Dynamic Seat Allocation** — Automatically balances students from different branches across rooms so adjacent seats do not take the same subject.
-- **Works 100% In-Browser** — Client-side storage and algorithms allow immediate execution with zero database dependencies.
-- **Local & Production Ready** — Environment variable support (`.env`) for production hosting, with sensible local fallbacks.
-- **Printable Seating Plan** — Dedicated print stylesheet generating clean, print-friendly reports for exam halls.
-- **SQL Injection & XSS Protection** — Parameterized prepared statements across all database endpoints.
-- **Session Authentication** — Protected admin dashboard and seating generation workflows.
 
 ---
 
@@ -73,16 +59,28 @@ If you prefer running the PHP/MySQL backend:
 
 ---
 
+## Sample Roll Numbers to Test
+
+| Year | Branch | Sample Roll Numbers |
+|---|---|---|
+| **1st Year** | CSE, ECE, MECH, IT | `24CS01`, `24CS05`, `24EC01`, `24ME01` |
+| **2nd Year** | CSE, ECE, MECH, IT | `23CS01`, `23CS05`, `23EC02`, `23IT01` |
+| **3rd Year** | CSE, ECE, MECH, IT | `22CS01`, `22CS03`, `22EC01`, `22ME02` |
+| **4th Year** | CSE, ECE, MECH, IT | `21CS01`, `21CS03`, `21EC01`, `21EC02` |
+
+---
+
 ## Project Structure
 
 ```
 Exam-Seating-Arrangement/
 │
-├── index.html            # Standalone browser entry point (No XAMPP required)
-├── exam_seating.html     # Client-side admin login
-├── admin.html            # Client-side admin seating dashboard
-├── generate_seating.html # Client-side seating plan & print view
-├── app.js                # Core browser application & seating algorithm
+├── index.html            # College Examination Portal Landing Page
+├── student.html          # Student Seating Allotment & Hall Ticket Pass
+├── exam_seating.html     # Admin Login Page
+├── admin.html            # Examination Controller Dashboard
+├── generate_seating.html # Official Invigilator & Door Notice Charts
+├── app.js                # Multi-year seating allocation algorithm & database
 ├── server.js             # Zero-dependency Node.js local runner
 ├── server.py             # Zero-dependency Python local runner
 ├── start.bat             # One-click Windows desktop launcher
@@ -92,27 +90,11 @@ Exam-Seating-Arrangement/
 ├── admin.php             # PHP admin dashboard
 ├── generate_seating.php  # PHP seating generation
 ├── get_exam_dates.php    # PHP AJAX date selector
-├── db.php                # Modular database connector
-├── config.php            # Environment configuration (.env support)
-├── setup.php             # Automated one-click database installer
-├── database.sql          # Complete MySQL schema & seed data
+├── db.php                # Database connector with auto-setup detection
+├── config.php            # Environment configuration
+├── setup.php             # One-click database installer
+├── database.sql          # Complete MySQL schema & 4-year sample dataset
 ├── logout.php            # Session termination
-├── style.css             # Unified responsive stylesheet with print rules
+├── style.css             # Responsive styling & print rules
 └── screenshots/          # Application preview images
 ```
-
----
-
-## Screenshots
-
-### Welcome Screen
-![Index Screenshot](./screenshots/index.png)
-
-### Admin Login
-![Admin Login Screenshot](./screenshots/admin_login.png)
-
-### Seating Generation
-![Generated Seating](./screenshots/generate_seating.png)
-
-### Printable Seating Layout
-![Print Generated Seating](./screenshots/print_generate_seating.png)

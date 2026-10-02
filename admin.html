@@ -3,274 +3,883 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Exam Seating Arrangement</title>
+  <title>Admin Examination Control Center | Exam Arrangement</title>
   <link rel="stylesheet" href="style.css">
   <style>
     body {
       margin: 0;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      background: #f1f5f9;
+      color: #1e293b;
     }
 
-    .nav-buttons {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+    /* Top Navigation */
+    .admin-nav {
+      background: #0f172a;
+      color: white;
+      padding: 15px 30px;
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
       gap: 10px;
     }
 
-    .top-button {
+    .nav-links {
       display: flex;
+      gap: 15px;
       align-items: center;
+    }
+
+    .nav-btn {
+      color: #94a3b8;
       text-decoration: none;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
-      color: #333;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 8px 16px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s;
-      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-logout {
+      background: #dc2626;
+      color: white;
       border: none;
-    }
-
-    .top-button:hover {
-      background: #fff;
-      color: #000;
-      transform: translateY(-2px);
-    }
-
-    .top-button svg {
-      width: 18px;
-      height: 18px;
-      margin-right: 6px;
-      fill: #333;
-    }
-
-    .logout-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #dc3545;
-      color: white;
-    }
-
-    .logout-btn:hover {
-      background: #bd2130;
-      color: white;
-    }
-
-    .center {
-      background: #ffffff;
-      padding: 40px 50px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      width: 400px;
-      max-width: 90%;
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    h1 {
-      color: #333;
-      margin-bottom: 25px;
-      font-size: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    label {
-      display: block;
-      text-align: left;
-      margin-bottom: 6px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
       font-weight: 600;
-      color: #444;
+      transition: background 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: #b91c1c;
+    }
+
+    /* Main Container */
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    /* Dashboard Header */
+    .dash-header {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .dash-header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #0f172a;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 5px;
+      background: #e2e8f0;
+      padding: 6px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 10px 18px;
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab-button.active {
+      background: #fff;
+      color: #0052cc;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Tab Content Cards */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 25px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+      color: #0f172a;
+    }
+
+    .card-subtitle {
+      margin: 0 0 20px 0;
+      color: #64748b;
       font-size: 14px;
     }
 
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      box-sizing: border-box;
-      background-color: #fff;
-    }
-
-    select:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-
-    .form-group {
+    /* Form Layouts */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      align-items: end;
       margin-bottom: 20px;
     }
 
-    .submit-btn {
-      background: linear-gradient(135deg, #007bff, #0056d2);
-      border: none;
-      color: white;
-      padding: 12px 35px;
-      font-size: 16px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .submit-btn:hover {
-      background: linear-gradient(135deg, #0056d2, #0041a8);
-      transform: translateY(-2px);
-    }
-
-    .data-stats {
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
+    .form-group label {
       font-size: 13px;
-      color: #666;
+      font-weight: 600;
+      color: #334155;
     }
 
-    .reset-btn {
-      background: none;
+    .form-control {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #0052cc;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0052cc, #003e99);
+      color: white;
       border: none;
-      color: #007bff;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #003e99, #002a66);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
       font-size: 12px;
       cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
-      margin-top: 8px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    /* Data Tables */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .badge-year {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .badge-branch {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    /* Seating Result Cards */
+    .room-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #fafbfc;
+    }
+
+    .room-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+
+    .room-card-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #0f172a;
+    }
+
+    .column-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .side-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .side-box.left-side {
+      border-left: 4px solid #0052cc;
+    }
+
+    .side-box.right-side {
+      border-left: 4px solid #00a389;
+    }
+
+    .side-box h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    .side-group {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .side-subject {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    .side-range {
+      font-size: 13px;
+      background: #f1f5f9;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      color: #0f172a;
+      display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+      .column-split { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="nav-buttons">
-    <a href="index.html" class="top-button">
-      <svg viewBox="0 0 24 24">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+  <!-- Top Bar -->
+  <div class="admin-nav">
+    <div class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
       </svg>
-      Home
-    </a>
+      College Examination Administration
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="student.html" class="nav-btn" target="_blank">Student View &nearr;</a>
+      <button onclick="adminLogout()" class="btn-logout">Logout</button>
+    </div>
   </div>
 
-  <button onclick="logout()" class="top-button logout-btn">Logout</button>
-
-  <div class="center">
-    <h1>Generate Seating</h1>
-    <form id="seatingForm">
-      
-      <div class="form-group">
-        <label for="year">Select Year:</label>
-        <select name="year" id="year" required>
-          <option value="">--Select Year--</option>
-          <option value="1">1st Year</option>
-          <option value="2">2nd Year</option>
-          <option value="3">3rd Year</option>
-          <option value="4">4th Year</option>
-        </select>
+  <div class="dashboard-container">
+    <div class="dash-header">
+      <div>
+        <h1>Examination Controller Dashboard</h1>
+        <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Chief Examination Superintendent Control Portal</div>
       </div>
-
-      <div class="form-group">
-        <label for="exam_dates">Select Exam Date:</label>
-        <select name="exam_date" id="exam_dates" required>
-          <option value="">--Select Year First--</option>
-        </select>
+      <div>
+        <a href="generate_seating.html" class="btn-primary" style="text-decoration: none;">View Seating Chart & Print &rarr;</a>
       </div>
+    </div>
 
-      <button type="submit" class="submit-btn">Generate Seating</button>
-    </form>
+    <!-- Navigation Tabs -->
+    <div class="tab-bar">
+      <button class="tab-button active" onclick="switchTab('tab-seating')">&#9881; Generate Seating</button>
+      <button class="tab-button" onclick="switchTab('tab-rooms')">&#127979; Exam Classrooms</button>
+      <button class="tab-button" onclick="switchTab('tab-exams')">&#128197; Exam Timetable</button>
+      <button class="tab-button" onclick="switchTab('tab-students')">&#128101; Student Rosters</button>
+      <button class="tab-button" onclick="switchTab('tab-reset')">&#8635; System Reset</button>
+    </div>
 
-    <div class="data-stats">
-      <span id="statsLabel">Loading database...</span><br>
-      <button type="button" class="reset-btn" onclick="handleReset()">Reset to Default Sample Data</button>
+    <!-- TAB 1: Seating Plan Generator -->
+    <div id="tab-seating" class="tab-pane active">
+      <div class="card">
+        <h2>Generate College Seating Plan</h2>
+        <p class="card-subtitle">Select examination date and academic year(s) to generate inter-year and cross-branch alternating seating arrangements.</p>
+
+        <form id="planForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="planDate">Examination Date:</label>
+              <select id="planDate" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label for="planSession">Session / Timing:</label>
+              <select id="planSession" class="form-control" required></select>
+            </div>
+
+            <div class="form-group">
+              <label for="planYear">Academic Years:</label>
+              <select id="planYear" class="form-control" required>
+                <option value="all">All Academic Years (Cross-Year Interleaving)</option>
+                <option value="1">1st Year Only</option>
+                <option value="2">2nd Year Only</option>
+                <option value="3">3rd Year Only</option>
+                <option value="4">4th Year Only</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-primary" style="height: 42px;">Generate Seating Plan</button>
+          </div>
+        </form>
+
+        <div id="planOutputContainer" style="display: none; margin-top: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h3 id="planTitle" style="margin: 0; font-size: 18px; color: #0f172a;">Seating Plan Summary</h3>
+            <div>
+              <a href="generate_seating.html" class="btn-primary" style="text-decoration: none; padding: 8px 16px; font-size: 13px;">Full Screen & Print Door Charts</a>
+            </div>
+          </div>
+
+          <div id="planSummaryBanner" style="background: #e0f2fe; color: #0369a1; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; font-weight: 600;"></div>
+
+          <div id="roomsOutputList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Classroom Management -->
+    <div id="tab-rooms" class="tab-pane">
+      <div class="card">
+        <h2>Manage Classrooms & Examination Halls</h2>
+        <p class="card-subtitle">Configure available halls, block locations, and seating capacities.</p>
+
+        <form id="addRoomForm" style="margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <h4 style="margin: 0 0 12px 0;">Add New Examination Hall:</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hall / Room No:</label>
+              <input type="text" id="newRoomNo" class="form-control" placeholder="e.g. Hall 301" required>
+            </div>
+            <div class="form-group">
+              <label>Block / Building:</label>
+              <input type="text" id="newRoomBlock" class="form-control" placeholder="e.g. Science Block" required>
+            </div>
+            <div class="form-group">
+              <label>Total Capacity:</label>
+              <input type="number" id="newRoomCap" class="form-control" placeholder="e.g. 40" min="10" max="200" required>
+            </div>
+            <div class="form-group">
+              <label>Benches Count:</label>
+              <input type="number" id="newRoomBenches" class="form-control" placeholder="e.g. 20" min="5" max="100" required>
+            </div>
+            <button type="submit" class="btn-primary" style="height: 42px;">Add Classroom</button>
+          </div>
+        </form>
+
+        <h3>Configured Examination Halls (<span id="roomCountLabel">0</span>)</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Hall / Room No</th>
+                <th>Building / Block</th>
+                <th>Total Capacity</th>
+                <th>Benches</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="roomsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Exam Timetable Scheduling -->
+    <div id="tab-exams" class="tab-pane">
+      <div class="card">
+        <h2>Examination Timetable Scheduling</h2>
+        <p class="card-subtitle">Set up dates, subjects, subject codes, and sessions for all academic years.</p>
+
+        <form id="addExamForm" style="margin-bottom: 25px; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <h4 style="margin: 0 0 12px 0;">Schedule New Examination Subject:</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Exam Date:</label>
+              <input type="date" id="newExamDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Session / Timing:</label>
+              <select id="newExamSession" class="form-control" required>
+                <option value="Morning (09:30 AM - 12:30 PM)">Morning (09:30 AM - 12:30 PM)</option>
+                <option value="Afternoon (02:00 PM - 05:00 PM)">Afternoon (02:00 PM - 05:00 PM)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Academic Year:</label>
+              <select id="newExamYear" class="form-control" required>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Branch / Dept:</label>
+              <select id="newExamBranch" class="form-control" required>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="MECH">MECH</option>
+                <option value="IT">IT</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Subject Code:</label>
+              <input type="text" id="newExamCode" class="form-control" placeholder="e.g. CS301" required>
+            </div>
+            <div class="form-group">
+              <label>Subject Name:</label>
+              <input type="text" id="newExamSubject" class="form-control" placeholder="e.g. Database Management Systems" required>
+            </div>
+            <button type="submit" class="btn-primary" style="height: 42px;">Schedule Exam</button>
+          </div>
+        </form>
+
+        <h3>Scheduled Examinations (<span id="examCountLabel">0</span>)</h3>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Session</th>
+                <th>Year</th>
+                <th>Branch</th>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="examsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Student Rosters -->
+    <div id="tab-students" class="tab-pane">
+      <div class="card">
+        <h2>Student Rosters & Enrolment</h2>
+        <p class="card-subtitle">View enrolled students across all 4 academic years and multiple branches.</p>
+
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px;">
+            <span style="font-size: 12px; color: #64748b; text-transform: uppercase;">1st Year Students</span>
+            <div id="yr1Count" style="font-size: 20px; font-weight: bold; color: #0052cc;">0</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px;">
+            <span style="font-size: 12px; color: #64748b; text-transform: uppercase;">2nd Year Students</span>
+            <div id="yr2Count" style="font-size: 20px; font-weight: bold; color: #0052cc;">0</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px;">
+            <span style="font-size: 12px; color: #64748b; text-transform: uppercase;">3rd Year Students</span>
+            <div id="yr3Count" style="font-size: 20px; font-weight: bold; color: #0052cc;">0</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px;">
+            <span style="font-size: 12px; color: #64748b; text-transform: uppercase;">4th Year Students</span>
+            <div id="yr4Count" style="font-size: 20px; font-weight: bold; color: #0052cc;">0</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+          <input type="text" id="studentSearchInput" class="form-control" placeholder="Search by name, roll number, or branch..." style="max-width: 350px;">
+          <select id="studentFilterYear" class="form-control" style="max-width: 180px;">
+            <option value="">All Years</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+          </select>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Student Name</th>
+                <th>Academic Year</th>
+                <th>Branch</th>
+                <th>Assigned Room (Sample)</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: System Reset -->
+    <div id="tab-reset" class="tab-pane">
+      <div class="card" style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <h2>System Reset & Seed Data</h2>
+        <p class="card-subtitle">Restore full realistic college examination dataset including 200+ students across all 4 years, multiple classrooms, and pre-scheduled exam dates.</p>
+        
+        <div style="margin: 25px 0;">
+          <button onclick="handleSystemReset()" class="btn-primary" style="background: #dc2626;">Reset to Default College Dataset</button>
+        </div>
+
+        <p style="font-size: 12px; color: #64748b;">This will reset student records, classrooms, and examination schedules to default college test data.</p>
+      </div>
     </div>
   </div>
 
   <script src="app.js"></script>
   <script>
-    // Update stats label
-    function updateStats() {
-      const s = getStudents().length;
-      const r = getRooms().length;
-      const e = getExams().length;
-      document.getElementById('statsLabel').textContent = `${s} Students | ${r} Rooms | ${e} Exams loaded`;
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+
+      if (tabId === 'tab-rooms') renderRoomsTable();
+      if (tabId === 'tab-exams') renderExamsTable();
+      if (tabId === 'tab-students') renderStudentsTable();
+      if (tabId === 'tab-seating') populateSeatingDropdowns();
     }
-    updateStats();
 
-    // Populate dates when year changes
-    const yearSelect = document.getElementById('year');
-    const dateSelect = document.getElementById('exam_dates');
+    // Populate Seating Dropdowns
+    function populateSeatingDropdowns() {
+      const dates = getDistinctExamDates();
+      const dateSelect = document.getElementById('planDate');
+      const sessionSelect = document.getElementById('planSession');
 
-    yearSelect.addEventListener('change', function() {
-      const yr = this.value;
       dateSelect.innerHTML = '';
-
-      if (!yr) {
-        dateSelect.innerHTML = "<option value=''>--Select Year First--</option>";
-        return;
-      }
-
-      const dates = getExamDatesForYear(yr);
-      if (dates.length === 0) {
-        dateSelect.innerHTML = "<option value=''>No exams scheduled for Year " + yr + "</option>";
-        return;
-      }
-
-      dateSelect.innerHTML = "<option value=''>--Select Exam Date--</option>";
       dates.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d;
-        opt.textContent = formatDate(d);
+        opt.textContent = formatDisplayDate(d);
         dateSelect.appendChild(opt);
       });
-    });
 
-    // Form submission
-    document.getElementById('seatingForm').addEventListener('submit', function(e) {
+      function updateSessions() {
+        const d = dateSelect.value;
+        const sessions = getSessionsForDate(d);
+        sessionSelect.innerHTML = '';
+        sessions.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          sessionSelect.appendChild(opt);
+        });
+      }
+
+      dateSelect.onchange = updateSessions;
+      if (dates.length > 0) updateSessions();
+    }
+    populateSeatingDropdowns();
+
+    // Generate Seating Form Submission
+    document.getElementById('planForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const yr = yearSelect.value;
-      const dt = dateSelect.value;
+      const d = document.getElementById('planDate').value;
+      const s = document.getElementById('planSession').value;
+      const y = document.getElementById('planYear').value;
 
-      if (!yr || !dt) {
-        alert('Please select both Year and Exam Date');
+      const yearsParam = y === 'all' ? ['all'] : [y];
+      const result = generateSeatingForDate(d, s, yearsParam);
+
+      if (result.error) {
+        alert(result.message);
         return;
       }
 
-      const res = generateSeatingPlan(yr, dt);
-      if (res.error) {
-        alert(res.message);
-        return;
-      }
-
-      window.location.href = `generate_seating.html?year=${encodeURIComponent(yr)}&date=${encodeURIComponent(dt)}`;
+      renderPlanOutput(result);
     });
 
-    function handleReset() {
-      if (confirm('Reset all student, room, and exam data to default sample records?')) {
-        resetData();
-        updateStats();
-        yearSelect.value = '';
-        dateSelect.innerHTML = "<option value=''>--Select Year First--</option>";
-        alert('Data reset successfully!');
+    function renderPlanOutput(result) {
+      const container = document.getElementById('planOutputContainer');
+      const banner = document.getElementById('planSummaryBanner');
+      const list = document.getElementById('roomsOutputList');
+
+      banner.textContent = `Generated successfully for ${result.formatted_date} (${result.session}) — ${result.total_students_scheduled} Students placed in ${result.rooms_used} Halls.`;
+
+      list.innerHTML = '';
+      result.room_allocations.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'room-card';
+
+        let leftHtml = '<div class="side-box left-side"><h4>Left (Column A)</h4><div style="color: #94a3b8;">Empty</div></div>';
+        if (r.left) {
+          leftHtml = `
+            <div class="side-box left-side">
+              <h4>${r.left.side}</h4>
+              <div class="side-group">${r.left.group} (${r.left.count} Students)</div>
+              <div class="side-subject">Subject: <strong>${r.left.subject}</strong> (${r.left.subject_code})</div>
+              <div class="side-range">Rolls: ${r.left.roll_range}</div>
+            </div>
+          `;
+        }
+
+        let rightHtml = '<div class="side-box right-side"><h4>Right (Column B)</h4><div style="color: #94a3b8;">Empty</div></div>';
+        if (r.right) {
+          rightHtml = `
+            <div class="side-box right-side">
+              <h4>${r.right.side}</h4>
+              <div class="side-group">${r.right.group} (${r.right.count} Students)</div>
+              <div class="side-subject">Subject: <strong>${r.right.subject}</strong> (${r.right.subject_code})</div>
+              <div class="side-range">Rolls: ${r.right.roll_range}</div>
+            </div>
+          `;
+        }
+
+        div.innerHTML = `
+          <div class="room-card-header">
+            <h3>${r.room_no} (${r.block})</h3>
+            <span style="font-weight: 600; color: #0052cc;">Allocated: ${r.allocated_count} / ${r.total_capacity} Seats</span>
+          </div>
+          <div class="column-split">
+            ${leftHtml}
+            ${rightHtml}
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      container.style.display = 'block';
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Classroom Management
+    function renderRoomsTable() {
+      const rooms = getRooms();
+      document.getElementById('roomCountLabel').textContent = rooms.length;
+      const tbody = document.getElementById('roomsTableBody');
+      tbody.innerHTML = '';
+
+      rooms.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${r.room_no}</strong></td>
+          <td>${r.block}</td>
+          <td>${r.capacity} seats</td>
+          <td>${r.benches} benches</td>
+          <td><button onclick="deleteRoom(${idx})" class="btn-danger">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('addRoomForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const no = document.getElementById('newRoomNo').value.trim();
+      const blk = document.getElementById('newRoomBlock').value.trim();
+      const cap = parseInt(document.getElementById('newRoomCap').value, 10);
+      const ben = parseInt(document.getElementById('newRoomBenches').value, 10);
+
+      const rooms = getRooms();
+      rooms.push({ room_no: no, block: blk, capacity: cap, benches: ben });
+      saveRooms(rooms);
+      renderRoomsTable();
+      this.reset();
+      alert('Examination room added successfully!');
+    });
+
+    function deleteRoom(idx) {
+      if (confirm('Delete this classroom?')) {
+        const rooms = getRooms();
+        rooms.splice(idx, 1);
+        saveRooms(rooms);
+        renderRoomsTable();
       }
     }
+
+    // Exam Timetable Management
+    function renderExamsTable() {
+      const exams = getExams();
+      document.getElementById('examCountLabel').textContent = exams.length;
+      const tbody = document.getElementById('examsTableBody');
+      tbody.innerHTML = '';
+
+      exams.forEach((ex, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${formatDisplayDate(ex.exam_date)}</strong></td>
+          <td>${ex.session}</td>
+          <td><span class="badge-year">Year ${ex.year}</span></td>
+          <td><span class="badge-branch">${ex.branch}</span></td>
+          <td><code>${ex.subject_code}</code></td>
+          <td>${ex.subject}</td>
+          <td><button onclick="deleteExam(${idx})" class="btn-danger">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('addExamForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const dt = document.getElementById('newExamDate').value;
+      const ss = document.getElementById('newExamSession').value;
+      const yr = document.getElementById('newExamYear').value;
+      const br = document.getElementById('newExamBranch').value;
+      const cd = document.getElementById('newExamCode').value.trim();
+      const sb = document.getElementById('newExamSubject').value.trim();
+
+      const exams = getExams();
+      exams.push({ id: 'ex_' + Date.now(), exam_date: dt, session: ss, year: yr, branch: br, subject_code: cd, subject: sb });
+      saveExams(exams);
+      renderExamsTable();
+      populateSeatingDropdowns();
+      this.reset();
+      alert('Exam scheduled successfully!');
+    });
+
+    function deleteExam(idx) {
+      if (confirm('Delete this scheduled exam?')) {
+        const exams = getExams();
+        exams.splice(idx, 1);
+        saveExams(exams);
+        renderExamsTable();
+        populateSeatingDropdowns();
+      }
+    }
+
+    // Student Rosters
+    function renderStudentsTable() {
+      const students = getStudents();
+      const q = document.getElementById('studentSearchInput').value.toLowerCase();
+      const yFilter = document.getElementById('studentFilterYear').value;
+
+      document.getElementById('yr1Count').textContent = students.filter(s => s.year === '1').length;
+      document.getElementById('yr2Count').textContent = students.filter(s => s.year === '2').length;
+      document.getElementById('yr3Count').textContent = students.filter(s => s.year === '3').length;
+      document.getElementById('yr4Count').textContent = students.filter(s => s.year === '4').length;
+
+      const filtered = students.filter(s => {
+        if (yFilter && s.year !== yFilter) return false;
+        if (q && !s.roll_no.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q) && !s.branch.toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      const tbody = document.getElementById('studentsTableBody');
+      tbody.innerHTML = '';
+
+      filtered.slice(0, 100).forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${s.roll_no}</strong></td>
+          <td>${s.name}</td>
+          <td><span class="badge-year">Year ${s.year}</span></td>
+          <td><span class="badge-branch">${s.branch}</span></td>
+          <td><span style="color: #64748b;">(Allocated upon Seating Generation)</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('studentSearchInput').addEventListener('input', renderStudentsTable);
+    document.getElementById('studentFilterYear').addEventListener('change', renderStudentsTable);
+
+    function handleSystemReset() {
+      if (confirm('Are you sure you want to reset all data to the default college test dataset (200 students, 5 halls, 20 exams)?')) {
+        initCollegeData(true);
+        alert('System reset successfully!');
+        window.location.reload();
+      }
+    }
+
+    // Pre-render on initial load
+    renderRoomsTable();
   </script>
 </body>
 </html>

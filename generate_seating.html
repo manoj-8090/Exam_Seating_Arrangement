@@ -3,248 +3,336 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generated Seating Arrangement</title>
+  <title>Examination Seating Arrangement & Door Notice</title>
   <link rel="stylesheet" href="style.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #89f7fe, #66a6ff);
-      min-height: 100vh;
-      text-align: center;
-      padding: 40px 20px;
+      background: #f1f5f9;
+      color: #1e293b;
+      padding: 30px 15px;
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1050px;
       margin: 0 auto;
       background: #fff;
       border-radius: 16px;
       padding: 35px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
-    h2 {
-      color: #222;
-      font-size: 24px;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .meta-badge {
-      display: inline-block;
-      background: #e9ecef;
-      color: #495057;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      font-size: 15px;
-    }
-
-    .warning-box {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeeba;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 25px;
-      text-align: left;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 14px 18px;
-      border-bottom: 1px solid #dee2e6;
-      font-size: 15px;
-      text-align: center;
-    }
-
-    th {
-      background: linear-gradient(135deg, #007bff, #0056d2);
-      color: white;
-      text-transform: uppercase;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f8f9fa;
-    }
-
-    tr:hover {
-      background-color: #e9f2ff;
-    }
-
-    .side-badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .side-left { background: #e3f2fd; color: #0d47a1; }
-    .side-right { background: #fce4ec; color: #880e4f; }
-
-    .action-buttons {
-      margin-top: 30px;
+    .header-bar {
       display: flex;
-      justify-content: center;
-      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header-bar h1 {
+      margin: 0;
+      font-size: 22px;
+      text-transform: uppercase;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
     }
 
     .btn {
-      padding: 12px 28px;
-      font-size: 15px;
-      border-radius: 25px;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
       font-weight: 600;
-      transition: all 0.3s ease;
-      display: inline-block;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #007bff, #0056d2);
+      background: #0052cc;
       color: white;
-      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+      background: #003e99;
     }
 
     .btn-secondary {
-      background: #6c757d;
-      color: white;
+      background: #e2e8f0;
+      color: #334155;
     }
 
     .btn-secondary:hover {
-      background: #5a6268;
-      transform: translateY(-2px);
+      background: #cbd5e1;
     }
 
-    /* Print styling */
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .meta-item span {
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      display: block;
+      font-weight: 600;
+    }
+
+    .meta-item strong {
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    /* Room Plan Card */
+    .room-notice {
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    .room-notice-header {
+      background: #0f172a;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .room-notice-header h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .room-notice-header span {
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    .columns-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .column-half {
+      padding: 20px;
+    }
+
+    .column-half:first-child {
+      border-right: 1px dashed #cbd5e1;
+      background: #fafbfc;
+    }
+
+    .column-half:last-child {
+      background: #fff;
+    }
+
+    .col-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .left-col-title { color: #0052cc; border-color: #0052cc; }
+    .right-col-title { color: #00a389; border-color: #00a389; }
+
+    .detail-row {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .detail-row label {
+      color: #64748b;
+      font-weight: 600;
+      display: inline-block;
+      width: 110px;
+    }
+
+    .roll-grid {
+      margin-top: 15px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .roll-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .roll-tag {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
     @media print {
-      body {
-        background: #fff;
-        padding: 0;
-      }
-      .container {
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-      }
-      .action-buttons, .back-button {
-        display: none !important;
-      }
-      th {
-        background: #333 !important;
-        color: #fff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; max-width: 100%; padding: 0; }
+      .header-bar .nav-actions { display: none !important; }
+      .room-notice { border: 1px solid #000; margin-bottom: 40px; page-break-after: always; }
+      .room-notice-header { background: #333 !important; color: white !important; -webkit-print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>Examination Seating Arrangement</h2>
-    <div id="metaInfo" class="meta-badge">Loading...</div>
-
-    <div id="warningContainer" style="display: none;" class="warning-box">
-      <strong>Warning:</strong> Available room capacity was insufficient for all students. Unseated counts:
-      <ul id="remainingList" style="margin: 8px 0 0 20px; padding: 0;"></ul>
+    <div class="header-bar">
+      <div>
+        <h1>Examination Hall Seating Arrangement</h1>
+        <div style="font-size: 13px; color: #64748b; margin-top: 3px;">Official Invigilator & Door Notice Display</div>
+      </div>
+      <div class="nav-actions">
+        <button onclick="window.print()" class="btn btn-primary">&#128438; Print Door Charts</button>
+        <a href="admin.html" class="btn btn-secondary">&larr; Back to Admin</a>
+      </div>
     </div>
 
-    <table id="seatingTable">
-      <thead>
-        <tr>
-          <th>Room No</th>
-          <th>Side</th>
-          <th>Branch</th>
-          <th>Roll Range</th>
-          <th>Students Count</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-
-    <div class="action-buttons">
-      <button onclick="window.print()" class="btn btn-primary">Print Seating Plan</button>
-      <a href="admin.html" class="btn btn-secondary">Back to Dashboard</a>
+    <div class="meta-card">
+      <div class="meta-item">
+        <span>Exam Date</span>
+        <strong id="planDateText">-</strong>
+      </div>
+      <div class="meta-item">
+        <span>Exam Session</span>
+        <strong id="planSessionText">-</strong>
+      </div>
+      <div class="meta-item">
+        <span>Total Students Seated</span>
+        <strong id="planTotalText">-</strong>
+      </div>
+      <div class="meta-item">
+        <span>Halls Configured</span>
+        <strong id="planRoomsText">-</strong>
+      </div>
     </div>
+
+    <div id="noticeContainer"></div>
   </div>
 
   <script src="app.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const yr = params.get('year');
-    const dt = params.get('date');
+    // Get active plan or generate for default date
+    const plans = getAllSeatingPlans();
+    let plan = null;
+    const activeKey = localStorage.getItem('cs_active_plan');
 
-    let result = null;
-
-    if (yr && dt) {
-      result = generateSeatingPlan(yr, dt);
+    if (activeKey && plans[activeKey]) {
+      plan = plans[activeKey];
     } else {
-      const saved = localStorage.getItem('seating_last_result');
-      if (saved) {
-        result = JSON.parse(saved);
+      const keys = Object.keys(plans);
+      if (keys.length > 0) {
+        plan = plans[keys[keys.length - 1]];
+      } else {
+        plan = generateSeatingForDate('2026-10-15', 'Morning (09:30 AM - 12:30 PM)', ['all']);
       }
     }
 
-    if (!result || result.error) {
-      alert(result ? result.message : 'No seating data found. Redirecting to dashboard.');
-      window.location.href = 'admin.html';
-    } else {
-      document.getElementById('metaInfo').textContent = `Year: ${result.year} | Exam Date: ${result.formatted_date || result.exam_date}`;
+    if (plan && plan.room_allocations) {
+      document.getElementById('planDateText').textContent = plan.formatted_date || plan.exam_date;
+      document.getElementById('planSessionText').textContent = plan.session;
+      document.getElementById('planTotalText').textContent = `${plan.total_students_scheduled} Students`;
+      document.getElementById('planRoomsText').textContent = `${plan.rooms_used} Halls`;
 
-      // Check remaining
-      const remKeys = Object.keys(result.remaining || {});
-      if (remKeys.length > 0) {
-        const warnBox = document.getElementById('warningContainer');
-        const list = document.getElementById('remainingList');
-        remKeys.forEach(k => {
-          const li = document.createElement('li');
-          li.innerHTML = `Branch <strong>${k}</strong>: ${result.remaining[k]} student(s) unseated`;
-          list.appendChild(li);
-        });
-        warnBox.style.display = 'block';
-      }
+      const container = document.getElementById('noticeContainer');
+      container.innerHTML = '';
 
-      // Populate table
-      const tbody = document.getElementById('tableBody');
-      if (result.seating && result.seating.length > 0) {
-        result.seating.forEach(s => {
-          const tr = document.createElement('tr');
-          const sideClass = s.column_side === 'Left' ? 'side-left' : 'side-right';
-          tr.innerHTML = `
-            <td><strong>${s.room_no}</strong></td>
-            <td><span class="side-badge ${sideClass}">${s.column_side}</span></td>
-            <td>${s.branch}</td>
-            <td>${s.roll_range}</td>
-            <td>${s.capacity}</td>
+      plan.room_allocations.forEach(r => {
+        const roomDiv = document.createElement('div');
+        roomDiv.className = 'room-notice';
+
+        // Left column
+        let leftColHtml = '<div class="column-half"><div class="col-title left-col-title">Column A (Left Side)</div><p style="color:#94a3b8;">No allocation</p></div>';
+        if (r.left) {
+          const rollsHtml = r.left.students.map(s => `<span class="roll-tag">${s.roll_no}</span>`).join('');
+          leftColHtml = `
+            <div class="column-half">
+              <div class="col-title left-col-title">
+                <span>Column A (Left Side)</span>
+                <span>${r.left.count} Students</span>
+              </div>
+              <div class="detail-row"><label>Class / Year:</label> <strong>${r.left.group}</strong></div>
+              <div class="detail-row"><label>Subject Code:</label> <code>${r.left.subject_code}</code></div>
+              <div class="detail-row"><label>Subject Name:</label> <strong>${r.left.subject}</strong></div>
+              <div class="detail-row"><label>Roll Range:</label> <strong>${r.left.roll_range}</strong></div>
+              <div class="roll-grid">
+                <div class="roll-tags">${rollsHtml}</div>
+              </div>
+            </div>
           `;
-          tbody.appendChild(tr);
-        });
-      } else {
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="5">No seating rows generated.</td>';
-        tbody.appendChild(tr);
-      }
+        }
+
+        // Right column
+        let rightColHtml = '<div class="column-half"><div class="col-title right-col-title">Column B (Right Side)</div><p style="color:#94a3b8;">No allocation</p></div>';
+        if (r.right) {
+          const rollsHtml = r.right.students.map(s => `<span class="roll-tag">${s.roll_no}</span>`).join('');
+          rightColHtml = `
+            <div class="column-half">
+              <div class="col-title right-col-title">
+                <span>Column B (Right Side)</span>
+                <span>${r.right.count} Students</span>
+              </div>
+              <div class="detail-row"><label>Class / Year:</label> <strong>${r.right.group}</strong></div>
+              <div class="detail-row"><label>Subject Code:</label> <code>${r.right.subject_code}</code></div>
+              <div class="detail-row"><label>Subject Name:</label> <strong>${r.right.subject}</strong></div>
+              <div class="detail-row"><label>Roll Range:</label> <strong>${r.right.roll_range}</strong></div>
+              <div class="roll-grid">
+                <div class="roll-tags">${rollsHtml}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        roomDiv.innerHTML = `
+          <div class="room-notice-header">
+            <h2>${r.room_no} — ${r.block}</h2>
+            <span>Total Seated: ${r.allocated_count} / ${r.total_capacity}</span>
+          </div>
+          <div class="columns-container">
+            ${leftColHtml}
+            ${rightColHtml}
+          </div>
+        `;
+        container.appendChild(roomDiv);
+      });
     }
   </script>
 </body>
