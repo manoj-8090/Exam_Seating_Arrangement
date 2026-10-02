@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Seating Arrangement</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      color: #222;
+      font-size: 24px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meta-badge {
+      display: inline-block;
+      background: #e9ecef;
+      color: #495057;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    th {
+      background: linear-gradient(135deg, #007bff, #0056d2);
+      color: white;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    tr:hover {
+      background-color: #e9f2ff;
+    }
+
+    .side-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .side-left { background: #e3f2fd; color: #0d47a1; }
+    .side-right { background: #fce4ec; color: #880e4f; }
+
+    .action-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      font-size: 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #007bff, #0056d2);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      .action-buttons, .back-button {
+        display: none !important;
+      }
+      th {
+        background: #333 !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Examination Seating Arrangement</h2>
+    <div id="metaInfo" class="meta-badge">Loading...</div>
+
+    <div id="warningContainer" style="display: none;" class="warning-box">
+      <strong>Warning:</strong> Available room capacity was insufficient for all students. Unseated counts:
+      <ul id="remainingList" style="margin: 8px 0 0 20px; padding: 0;"></ul>
+    </div>
+
+    <table id="seatingTable">
+      <thead>
+        <tr>
+          <th>Room No</th>
+          <th>Side</th>
+          <th>Branch</th>
+          <th>Roll Range</th>
+          <th>Students Count</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+
+    <div class="action-buttons">
+      <button onclick="window.print()" class="btn btn-primary">Print Seating Plan</button>
+      <a href="admin.html" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const yr = params.get('year');
+    const dt = params.get('date');
+
+    let result = null;
+
+    if (yr && dt) {
+      result = generateSeatingPlan(yr, dt);
+    } else {
+      const saved = localStorage.getItem('seating_last_result');
+      if (saved) {
+        result = JSON.parse(saved);
+      }
+    }
+
+    if (!result || result.error) {
+      alert(result ? result.message : 'No seating data found. Redirecting to dashboard.');
+      window.location.href = 'admin.html';
+    } else {
+      document.getElementById('metaInfo').textContent = `Year: ${result.year} | Exam Date: ${result.formatted_date || result.exam_date}`;
+
+      // Check remaining
+      const remKeys = Object.keys(result.remaining || {});
+      if (remKeys.length > 0) {
+        const warnBox = document.getElementById('warningContainer');
+        const list = document.getElementById('remainingList');
+        remKeys.forEach(k => {
+          const li = document.createElement('li');
+          li.innerHTML = `Branch <strong>${k}</strong>: ${result.remaining[k]} student(s) unseated`;
+          list.appendChild(li);
+        });
+        warnBox.style.display = 'block';
+      }
+
+      // Populate table
+      const tbody = document.getElementById('tableBody');
+      if (result.seating && result.seating.length > 0) {
+        result.seating.forEach(s => {
+          const tr = document.createElement('tr');
+          const sideClass = s.column_side === 'Left' ? 'side-left' : 'side-right';
+          tr.innerHTML = `
+            <td><strong>${s.room_no}</strong></td>
+            <td><span class="side-badge ${sideClass}">${s.column_side}</span></td>
+            <td>${s.branch}</td>
+            <td>${s.roll_range}</td>
+            <td>${s.capacity}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5">No seating rows generated.</td>';
+        tbody.appendChild(tr);
+      }
+    }
+  </script>
+</body>
+</html>

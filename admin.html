@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Exam Seating Arrangement</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+
+    .nav-buttons {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .top-button {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .top-button:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .top-button svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
+      fill: #333;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #dc3545;
+      color: white;
+    }
+
+    .logout-btn:hover {
+      background: #bd2130;
+      color: white;
+    }
+
+    .center {
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      width: 400px;
+      max-width: 90%;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #444;
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+
+    select:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #007bff, #0056d2);
+      border: none;
+      color: white;
+      padding: 12px 35px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #0056d2, #0041a8);
+      transform: translateY(-2px);
+    }
+
+    .data-stats {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .reset-btn {
+      background: none;
+      border: none;
+      color: #007bff;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      margin-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="nav-buttons">
+    <a href="index.html" class="top-button">
+      <svg viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+      Home
+    </a>
+  </div>
+
+  <button onclick="logout()" class="top-button logout-btn">Logout</button>
+
+  <div class="center">
+    <h1>Generate Seating</h1>
+    <form id="seatingForm">
+      
+      <div class="form-group">
+        <label for="year">Select Year:</label>
+        <select name="year" id="year" required>
+          <option value="">--Select Year--</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exam_dates">Select Exam Date:</label>
+        <select name="exam_date" id="exam_dates" required>
+          <option value="">--Select Year First--</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Generate Seating</button>
+    </form>
+
+    <div class="data-stats">
+      <span id="statsLabel">Loading database...</span><br>
+      <button type="button" class="reset-btn" onclick="handleReset()">Reset to Default Sample Data</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Update stats label
+    function updateStats() {
+      const s = getStudents().length;
+      const r = getRooms().length;
+      const e = getExams().length;
+      document.getElementById('statsLabel').textContent = `${s} Students | ${r} Rooms | ${e} Exams loaded`;
+    }
+    updateStats();
+
+    // Populate dates when year changes
+    const yearSelect = document.getElementById('year');
+    const dateSelect = document.getElementById('exam_dates');
+
+    yearSelect.addEventListener('change', function() {
+      const yr = this.value;
+      dateSelect.innerHTML = '';
+
+      if (!yr) {
+        dateSelect.innerHTML = "<option value=''>--Select Year First--</option>";
+        return;
+      }
+
+      const dates = getExamDatesForYear(yr);
+      if (dates.length === 0) {
+        dateSelect.innerHTML = "<option value=''>No exams scheduled for Year " + yr + "</option>";
+        return;
+      }
+
+      dateSelect.innerHTML = "<option value=''>--Select Exam Date--</option>";
+      dates.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = formatDate(d);
+        dateSelect.appendChild(opt);
+      });
+    });
+
+    // Form submission
+    document.getElementById('seatingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const yr = yearSelect.value;
+      const dt = dateSelect.value;
+
+      if (!yr || !dt) {
+        alert('Please select both Year and Exam Date');
+        return;
+      }
+
+      const res = generateSeatingPlan(yr, dt);
+      if (res.error) {
+        alert(res.message);
+        return;
+      }
+
+      window.location.href = `generate_seating.html?year=${encodeURIComponent(yr)}&date=${encodeURIComponent(dt)}`;
+    });
+
+    function handleReset() {
+      if (confirm('Reset all student, room, and exam data to default sample records?')) {
+        resetData();
+        updateStats();
+        yearSelect.value = '';
+        dateSelect.innerHTML = "<option value=''>--Select Year First--</option>";
+        alert('Data reset successfully!');
+      }
+    }
+  </script>
+</body>
+</html>

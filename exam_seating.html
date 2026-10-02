@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Exam Seating Arrangement</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: bold;
+      color: #333;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .back-button svg {
+      width: 18px;
+      height: 18px;
+      margin-right: 6px;
+      fill: #333;
+    }
+
+    .back-button:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .login-card {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      width: 340px;
+      text-align: center;
+    }
+
+    .login-card h1 {
+      margin-bottom: 25px;
+      font-size: 1.8em;
+      color: #333;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+    }
+
+    .login-form label {
+      font-weight: 600;
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .login-form input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-form input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #007bff, #0056d2);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, #0056d2, #0041a8);
+      transform: translateY(-2px);
+    }
+
+    .error-msg {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .demo-credentials {
+      margin-top: 20px;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #555;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-button">
+    <svg viewBox="0 0 24 24">
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
+    Home
+  </a>
+
+  <div class="login-card">
+    <h1>Admin Login</h1>
+
+    <div id="errorMsg" class="error-msg"></div>
+
+    <form id="loginForm" class="login-form">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="admin" required autocomplete="username">
+      </div>
+
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" value="admin123" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="demo-credentials">
+      <strong>Default Login:</strong><br>
+      User: <code>admin</code> | Pass: <code>admin123</code>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if (isLoggedIn()) {
+      window.location.href = 'admin.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      const err = document.getElementById('errorMsg');
+
+      if (login(u, p)) {
+        window.location.href = 'admin.html';
+      } else {
+        err.textContent = 'Invalid username or password';
+        err.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
