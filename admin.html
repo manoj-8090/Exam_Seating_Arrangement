@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Examination Control Center | Exam Arrangement</title>
-  <!-- Google Fonts for Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,7 +25,6 @@
       --slate-600: #475569;
       --slate-500: #64748b;
       --slate-400: #94a3b8;
-      --slate-300: #cbd5e1;
       --slate-200: #e2e8f0;
       --slate-100: #f1f5f9;
       --slate-50: #f8fafc;
@@ -36,33 +34,28 @@
       --radius-lg: 16px;
       --radius-xl: 20px;
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: #f8fafc;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.06) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.06) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%);
       color: var(--slate-800);
       min-height: 100vh;
       line-height: 1.5;
     }
 
-    /* Top Navigation Bar */
+    /* Top Bar */
     .top-navbar {
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(15, 23, 42, 0.96);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       position: sticky;
       top: 0;
@@ -97,13 +90,11 @@
       font-weight: 700;
       color: var(--white);
       letter-spacing: -0.3px;
-      line-height: 1.2;
     }
 
     .brand-text span {
       font-size: 12px;
       color: var(--slate-400);
-      font-weight: 500;
     }
 
     .nav-actions {
@@ -131,13 +122,6 @@
       border-radius: 50%;
       background: #10b981;
       box-shadow: 0 0 8px #10b981;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
-      100% { opacity: 1; transform: scale(1); }
     }
 
     .nav-link-btn {
@@ -147,7 +131,7 @@
       font-weight: 600;
       padding: 8px 14px;
       border-radius: var(--radius-sm);
-      transition: all 0.2s ease;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -167,7 +151,7 @@
       padding: 8px 16px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -176,17 +160,15 @@
     .btn-logout:hover {
       background: #ef4444;
       color: var(--white);
-      border-color: #ef4444;
     }
 
-    /* Main Content Wrapper */
+    /* Layout */
     .main-layout {
       max-width: 1280px;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem 1.5rem;
     }
 
-    /* Page Header */
     .dashboard-header {
       margin-bottom: 2rem;
       display: flex;
@@ -200,21 +182,14 @@
       font-size: 26px;
       font-weight: 800;
       color: var(--slate-900);
-      letter-spacing: -0.5px;
     }
 
     .header-titles p {
       font-size: 14px;
       color: var(--slate-500);
-      margin-top: 4px;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    /* KPI Summary Cards */
+    /* KPIs */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -230,7 +205,7 @@
       box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .kpi-card:hover {
@@ -286,12 +261,9 @@
       margin-top: 8px;
       font-size: 13px;
       color: var(--slate-500);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    /* Segmented Navigation Tabs */
+    /* Tabs */
     .tab-nav {
       background: var(--slate-200);
       padding: 5px;
@@ -300,7 +272,6 @@
       gap: 4px;
       margin-bottom: 1.75rem;
       overflow-x: auto;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .tab-btn {
@@ -314,7 +285,7 @@
       font-weight: 600;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -333,7 +304,6 @@
       box-shadow: var(--shadow-sm);
     }
 
-    /* Tab Content Panes */
     .tab-pane {
       display: none;
       animation: fadeIn 0.25s ease-out forwards;
@@ -348,7 +318,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Modern Card Container */
+    /* Card Box */
     .content-card {
       background: var(--white);
       border: 1px solid var(--slate-200);
@@ -379,7 +349,7 @@
       margin-top: 2px;
     }
 
-    /* Modern Form Controls */
+    /* Forms */
     .form-panel {
       background: var(--slate-50);
       border: 1px solid var(--slate-200);
@@ -428,12 +398,194 @@
       color: var(--slate-800);
       background: var(--white);
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
     }
 
     .form-select:focus, .form-input:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    /* Timing Duration Calculator Box */
+    .duration-meter-box {
+      background: linear-gradient(135deg, #f0fdf4, #e0f2fe);
+      border: 1.5px dashed #0284c7;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .duration-meter-text {
+      font-size: 13px;
+      color: var(--slate-700);
+    }
+
+    .duration-meter-text strong {
+      font-size: 16px;
+      color: #0369a1;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .duration-quick-adjust {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-chip {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--slate-700);
+      transition: all 0.2s;
+    }
+
+    .btn-chip:hover {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    /* Full Calendar Component */
+    .calendar-container {
+      background: var(--white);
+      border: 1.5px solid var(--slate-200);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .calendar-month-year {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--slate-900);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .calendar-nav-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .cal-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--slate-200);
+      background: var(--slate-50);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--slate-700);
+      transition: all 0.2s;
+    }
+
+    .cal-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+
+    .cal-weekday {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--slate-400);
+      padding: 8px 0;
+    }
+
+    .cal-day-cell {
+      min-height: 60px;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white);
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .cal-day-cell:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .cal-day-cell.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    .cal-day-cell.other-month {
+      opacity: 0.35;
+      background: var(--slate-50);
+    }
+
+    .cal-day-cell.has-exams {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+
+    .cal-day-num {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-800);
+    }
+
+    .cal-exam-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: #2563eb;
+      color: var(--white);
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
+
+    .selected-date-preview {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     /* Buttons */
@@ -451,7 +603,7 @@
       justify-content: center;
       gap: 8px;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
     .btn-primary {
@@ -463,7 +615,6 @@
     .btn-primary:hover {
       background: linear-gradient(135deg, #4338ca, #3730a3);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
     }
 
     .btn-secondary {
@@ -474,15 +625,14 @@
 
     .btn-secondary:hover {
       background: var(--slate-100);
-      border-color: var(--slate-300);
     }
 
     .btn-danger {
       background: var(--danger-light);
       color: var(--danger);
       border: 1px solid rgba(239, 68, 68, 0.2);
-      height: 34px;
-      padding: 0 12px;
+      height: 32px;
+      padding: 0 10px;
       font-size: 12px;
       border-radius: var(--radius-sm);
     }
@@ -492,13 +642,12 @@
       color: var(--white);
     }
 
-    /* Modern Table Design */
+    /* Tables */
     .table-container {
       border: 1px solid var(--slate-200);
       border-radius: var(--radius-lg);
       overflow: hidden;
       background: var(--white);
-      box-shadow: var(--shadow-sm);
     }
 
     table {
@@ -526,15 +675,10 @@
       vertical-align: middle;
     }
 
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
     tbody tr:hover td {
       background: rgba(248, 250, 252, 0.8);
     }
 
-    /* Badges & Chips */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -568,7 +712,7 @@
       font-weight: 600;
     }
 
-    /* Seating Allocation Result Cards */
+    /* Seating Cards */
     .allocation-banner {
       background: linear-gradient(135deg, #eef2ff, #e0f2fe);
       border: 1px solid #c7d2fe;
@@ -582,17 +726,6 @@
       gap: 15px;
     }
 
-    .banner-text strong {
-      color: var(--primary);
-      font-size: 16px;
-    }
-
-    .banner-text p {
-      font-size: 13px;
-      color: var(--slate-600);
-      margin-top: 3px;
-    }
-
     .room-card {
       background: var(--white);
       border: 1.5px solid var(--slate-200);
@@ -600,12 +733,6 @@
       padding: 1.75rem;
       margin-bottom: 1.5rem;
       box-shadow: var(--shadow-sm);
-      transition: all 0.2s ease;
-    }
-
-    .room-card:hover {
-      box-shadow: var(--shadow-md);
-      border-color: #cbd5e1;
     }
 
     .room-card-head {
@@ -617,32 +744,6 @@
       border-bottom: 1px solid var(--slate-100);
     }
 
-    .room-name-block h4 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--slate-900);
-    }
-
-    .room-name-block span {
-      font-size: 13px;
-      color: var(--slate-500);
-    }
-
-    .room-capacity-meter {
-      text-align: right;
-    }
-
-    .capacity-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      background: #ecfdf5;
-      color: #059669;
-      border: 1px solid #a7f3d0;
-    }
-
     .column-split-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -652,7 +753,6 @@
     .side-card {
       border-radius: var(--radius-lg);
       padding: 1.25rem;
-      position: relative;
     }
 
     .side-left {
@@ -672,34 +772,13 @@
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       padding: 3px 10px;
       border-radius: 12px;
       margin-bottom: 10px;
     }
 
-    .side-pill-left {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .side-pill-right {
-      background: #ccfbf1;
-      color: #0f766e;
-    }
-
-    .side-group-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--slate-900);
-      margin-bottom: 6px;
-    }
-
-    .side-subject-line {
-      font-size: 13px;
-      color: var(--slate-600);
-      margin-bottom: 10px;
-    }
+    .side-pill-left { background: #dbeafe; color: #1e40af; }
+    .side-pill-right { background: #ccfbf1; color: #0f766e; }
 
     .roll-range-box {
       font-family: 'JetBrains Mono', monospace;
@@ -710,52 +789,9 @@
       padding: 6px 12px;
       border-radius: var(--radius-sm);
       display: inline-block;
-      color: var(--slate-800);
     }
 
-    /* Student Roster Filter Bar */
-    .roster-stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 1.5rem;
-    }
-
-    .roster-stat-pill {
-      background: var(--slate-50);
-      border: 1px solid var(--slate-200);
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      text-align: center;
-    }
-
-    .roster-stat-pill span {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--slate-500);
-      display: block;
-      text-transform: uppercase;
-    }
-
-    .roster-stat-pill strong {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .search-filter-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-
-    .search-filter-bar input {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    /* Toast Notification */
+    /* Toast */
     .toast-notify {
       position: fixed;
       bottom: 25px;
@@ -772,7 +808,7 @@
       gap: 10px;
       transform: translateY(100px);
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s;
       z-index: 1000;
     }
 
@@ -785,19 +821,16 @@
       .top-navbar { padding: 0 1rem; }
       .main-layout { padding: 1rem 1rem 3rem 1rem; }
       .column-split-grid { grid-template-columns: 1fr; }
-      .roster-stats-row { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Glassmorphism Navigation Bar -->
+  <!-- Top Navigation -->
   <header class="top-navbar">
     <div class="brand-group">
       <div class="brand-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
       <div class="brand-text">
         <h1>Examination Control Center</h1>
@@ -810,111 +843,72 @@
         <div class="status-dot"></div>
         <span>Live System</span>
       </div>
-      <a href="index.html" class="nav-link-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        Home
-      </a>
-      <a href="student.html" class="nav-link-btn" target="_blank">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Student Portal
-      </a>
-      <button onclick="adminLogout()" class="btn-logout">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Logout
-      </button>
+      <a href="index.html" class="nav-link-btn">Home</a>
+      <a href="student.html" class="nav-link-btn" target="_blank">Student Portal &nearr;</a>
+      <button onclick="adminLogout()" class="btn-logout">Logout</button>
     </div>
   </header>
 
-  <!-- Main Content Layout -->
   <main class="main-layout">
     
-    <!-- Dashboard Header Row -->
+    <!-- Header Row -->
     <div class="dashboard-header">
       <div class="header-titles">
         <h2>Executive Examination Controller</h2>
-        <p>Orchestrate multi-year seat allocation, classroom capacities, and branch schedules.</p>
+        <p>Interactive calendar, custom session timing adjuster, student enrolment, and multi-year seating generator.</p>
       </div>
-      <div class="header-actions">
-        <a href="generate_seating.html" class="btn btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-          Door Notice Charts
-        </a>
-        <button onclick="switchTab('tab-seating')" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          New Seating Run
-        </button>
+      <div>
+        <a href="generate_seating.html" class="btn btn-secondary">Print Door Notices &rarr;</a>
       </div>
     </div>
 
-    <!-- KPI Summary Metrics Bar -->
+    <!-- KPIs -->
     <div class="kpi-grid">
-      <div class="kpi-card" style="--card-accent: #4f46e5; --icon-bg: #eef2ff; --icon-color: #4f46e5;">
+      <div class="kpi-card" style="--card-accent: #4f46e5;">
         <div class="kpi-header">
           <span class="kpi-label">Total Enrolled</span>
-          <div class="kpi-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
+          <div class="kpi-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
         </div>
         <div class="kpi-value" id="kpiTotalStudents">200</div>
         <div class="kpi-subtext">Students across 4 Academic Years</div>
       </div>
 
-      <div class="kpi-card" style="--card-accent: #0ea5e9; --icon-bg: #f0f9ff; --icon-color: #0ea5e9;">
+      <div class="kpi-card" style="--card-accent: #0ea5e9;">
         <div class="kpi-header">
           <span class="kpi-label">Classrooms</span>
-          <div class="kpi-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-          </div>
+          <div class="kpi-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
         </div>
         <div class="kpi-value" id="kpiTotalRooms">5</div>
         <div class="kpi-subtext" id="kpiTotalCapacity">200 Total Seating Capacity</div>
       </div>
 
-      <div class="kpi-card" style="--card-accent: #10b981; --icon-bg: #ecfdf5; --icon-color: #10b981;">
+      <div class="kpi-card" style="--card-accent: #10b981;">
         <div class="kpi-header">
           <span class="kpi-label">Exam Timetable</span>
-          <div class="kpi-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
+          <div class="kpi-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg></div>
         </div>
         <div class="kpi-value" id="kpiTotalExams">20</div>
         <div class="kpi-subtext">Scheduled Question Papers</div>
       </div>
 
-      <div class="kpi-card" style="--card-accent: #f59e0b; --icon-bg: #fffbeb; --icon-color: #f59e0b;">
+      <div class="kpi-card" style="--card-accent: #f59e0b;">
         <div class="kpi-header">
-          <span class="kpi-label">Allocation Status</span>
-          <div class="kpi-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
+          <span class="kpi-label">Access Level</span>
+          <div class="kpi-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
         </div>
-        <div class="kpi-value" style="font-size: 22px; color: #d97706;">Ready & Active</div>
-        <div class="kpi-subtext">Published to Student Portal</div>
+        <div class="kpi-value" style="font-size: 22px; color: #d97706;">Administrator</div>
+        <div class="kpi-subtext">Full Creation & Scheduling Rights</div>
       </div>
     </div>
 
-    <!-- Segmented Navigation Tabs -->
+    <!-- Navigation Tabs -->
     <div class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('tab-seating')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Seating Generator
-      </button>
-      <button class="tab-btn" onclick="switchTab('tab-rooms')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Classrooms & Halls
-      </button>
-      <button class="tab-btn" onclick="switchTab('tab-exams')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Exam Timetables
-      </button>
-      <button class="tab-btn" onclick="switchTab('tab-students')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Student Rosters
-      </button>
-      <button class="tab-btn" onclick="switchTab('tab-reset')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-        Maintenance
-      </button>
+      <button class="tab-btn active" onclick="switchTab('tab-seating')">&#9881; Seating Generator</button>
+      <button class="tab-btn" onclick="switchTab('tab-calendar')">&#128197; Exam Calendar</button>
+      <button class="tab-btn" onclick="switchTab('tab-exams')">&#128337; Schedule Timetable</button>
+      <button class="tab-btn" onclick="switchTab('tab-students')">&#128101; Student Rosters & Add</button>
+      <button class="tab-btn" onclick="switchTab('tab-rooms')">&#127979; Classrooms</button>
+      <button class="tab-btn" onclick="switchTab('tab-reset')">&#8635; Reset</button>
     </div>
 
     <!-- TAB 1: Seating Plan Generator -->
@@ -923,27 +917,33 @@
         <div class="card-header-row">
           <div class="card-title-group">
             <h3>Generate Examination Seating Plan</h3>
-            <p>Interleave students across academic years and branches so adjacent benches never write the same exam.</p>
+            <p>Pick ANY date across the whole calendar, adjust custom session timings, and run multi-year cross-seating.</p>
           </div>
-          <div>
-            <span class="badge" style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;">Anti-Malpractice Algorithm Enabled</span>
-          </div>
+          <button type="button" onclick="switchTab('tab-calendar')" class="btn btn-secondary" style="height:36px; font-size:13px;">View Full Calendar &rarr;</button>
         </div>
 
         <form id="planForm" class="form-panel">
-          <div class="form-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-            Schedule Parameters
-          </div>
+          <div class="form-panel-title">1. Date & Session Timing Selection</div>
+          
           <div class="form-grid">
             <div class="input-field">
-              <label for="planDate">Exam Scheduled Date:</label>
-              <select id="planDate" class="form-select" required></select>
+              <label for="planDate">Exam Scheduled Date (Pick ANY Date):</label>
+              <input type="date" id="planDate" class="form-input" required>
             </div>
 
             <div class="input-field">
-              <label for="planSession">Session / Timing:</label>
-              <select id="planSession" class="form-select" required></select>
+              <label for="quickDateSelect">Or Select Previously Scheduled Date:</label>
+              <select id="quickDateSelect" class="form-select"></select>
+            </div>
+
+            <div class="input-field">
+              <label for="planSessionType">Session Slot:</label>
+              <select id="planSessionType" class="form-select">
+                <option value="Morning">Morning Session</option>
+                <option value="Afternoon">Afternoon Session</option>
+                <option value="Evening">Evening Session</option>
+                <option value="Custom">Custom Timing</option>
+              </select>
             </div>
 
             <div class="input-field">
@@ -956,13 +956,43 @@
                 <option value="4">4th Year Cohort</option>
               </select>
             </div>
+          </div>
 
-            <div>
-              <button type="submit" class="btn btn-primary" style="width: 100%;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Run Allocation Engine
-              </button>
+          <!-- Custom Time Adjuster -->
+          <div style="margin-top: 15px; border-top: 1px dashed var(--slate-200); padding-top: 15px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 10px;">
+              Adjust Session Timings & Total Exam Duration:
             </div>
+            <div class="form-grid">
+              <div class="input-field">
+                <label>Start Time:</label>
+                <input type="time" id="planStartTime" class="form-input" value="09:30" required>
+              </div>
+              <div class="input-field">
+                <label>End Time:</label>
+                <input type="time" id="planEndTime" class="form-input" value="12:30" required>
+              </div>
+              <div style="grid-column: span 2;">
+                <div class="duration-meter-box">
+                  <div class="duration-meter-text">
+                    Calculated Exam Window: <strong id="planCalcDuration">3 Hours 0 Mins</strong>
+                  </div>
+                  <div class="duration-quick-adjust">
+                    <span style="font-size: 12px; color: var(--slate-500); align-self: center;">Quick Adjust:</span>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('plan', 90)">1.5 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('plan', 120)">2.0 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('plan', 150)">2.5 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('plan', 180)">3.0 Hrs</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Run Allocation Engine For Selected Date & Time
+            </button>
           </div>
         </form>
 
@@ -973,9 +1003,8 @@
               <strong id="planSummaryTitle">Allocation Complete</strong>
               <p id="planSummaryBanner">Seating arrangement successfully generated.</p>
             </div>
-            <div style="display: flex; gap: 10px;">
+            <div>
               <a href="generate_seating.html" class="btn btn-primary" style="height: 38px; font-size: 13px;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                 Print Official Door Notices
               </a>
             </div>
@@ -986,7 +1015,271 @@
       </div>
     </div>
 
-    <!-- TAB 2: Classrooms & Halls Management -->
+    <!-- TAB 2: Interactive Full Calendar -->
+    <div id="tab-calendar" class="tab-pane">
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Full Institutional Examination Calendar</h3>
+            <p>Interactive calendar overview showing all examination dates. Click any date to view scheduled papers or launch seating generation.</p>
+          </div>
+          <div>
+            <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">Click any day to schedule</span>
+          </div>
+        </div>
+
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <div class="calendar-month-year">
+              <span id="calMonthYearTitle">October 2026</span>
+            </div>
+            <div class="calendar-nav-buttons">
+              <button class="cal-btn" onclick="changeCalMonth(-1)">&larr;</button>
+              <button class="btn btn-secondary" style="height:34px; padding:0 12px; font-size:12px;" onclick="goToCurrentMonth()">Today</button>
+              <button class="cal-btn" onclick="changeCalMonth(1)">&rarr;</button>
+            </div>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="cal-weekday">Sun</div>
+            <div class="cal-weekday">Mon</div>
+            <div class="cal-weekday">Tue</div>
+            <div class="cal-weekday">Wed</div>
+            <div class="cal-weekday">Thu</div>
+            <div class="cal-weekday">Fri</div>
+            <div class="cal-weekday">Sat</div>
+          </div>
+
+          <div class="calendar-grid" id="calendarDaysGrid" style="margin-top: 6px;"></div>
+
+          <div class="selected-date-preview" id="calDatePreview">
+            <div>
+              <div style="font-size: 12px; color: var(--slate-500); text-transform: uppercase; font-weight: 700;">Selected Calendar Date:</div>
+              <strong id="calSelectedDateText" style="font-size: 16px; color: var(--slate-900);">-</strong>
+              <div id="calScheduledExamsList" style="font-size: 13px; color: var(--slate-600); margin-top: 4px;">Loading schedule...</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn btn-secondary" onclick="useDateForScheduling()" style="height:38px; font-size:13px;">➕ Schedule Exam Here</button>
+              <button type="button" class="btn btn-primary" onclick="useDateForSeating()" style="height:38px; font-size:13px;">🚀 Generate Seating</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Exam Timetable Scheduling -->
+    <div id="tab-exams" class="tab-pane">
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Schedule Examination Papers & Sessions</h3>
+            <p>Schedule exam dates with customized start time, end time, and duration.</p>
+          </div>
+          <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;"><span id="examCountBadge">20</span> Papers Scheduled</span>
+        </div>
+
+        <form id="addExamForm" class="form-panel">
+          <div class="form-panel-title">1. Examination Details & Date</div>
+          <div class="form-grid">
+            <div class="input-field">
+              <label>Exam Date (Any Calendar Date):</label>
+              <input type="date" id="newExamDate" class="form-input" required>
+            </div>
+            <div class="input-field">
+              <label>Session Label:</label>
+              <select id="newExamSessionPreset" class="form-select">
+                <option value="Morning">Morning Session</option>
+                <option value="Afternoon">Afternoon Session</option>
+                <option value="Evening">Evening Session</option>
+                <option value="Custom">Custom Session</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Academic Year:</label>
+              <select id="newExamYear" class="form-select" required>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Branch / Dept:</label>
+              <select id="newExamBranch" class="form-select" required>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="MECH">MECH</option>
+                <option value="IT">IT</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Subject Code:</label>
+              <input type="text" id="newExamCode" class="form-input" placeholder="e.g. CS301" required>
+            </div>
+            <div class="input-field">
+              <label>Subject Name:</label>
+              <input type="text" id="newExamSubject" class="form-input" placeholder="e.g. Operating Systems" required>
+            </div>
+          </div>
+
+          <!-- Session Timing Adjuster -->
+          <div style="margin-top: 15px; border-top: 1px dashed var(--slate-200); padding-top: 15px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 10px;">
+              2. Adjust Session Timings (Total Time Calculated Automatically):
+            </div>
+            <div class="form-grid">
+              <div class="input-field">
+                <label>Start Time:</label>
+                <input type="time" id="newExamStartTime" class="form-input" value="09:30" required>
+              </div>
+              <div class="input-field">
+                <label>End Time:</label>
+                <input type="time" id="newExamEndTime" class="form-input" value="12:30" required>
+              </div>
+              <div style="grid-column: span 2;">
+                <div class="duration-meter-box">
+                  <div class="duration-meter-text">
+                    Calculated Exam Duration: <strong id="newExamCalcDuration">3 Hours 0 Mins</strong>
+                  </div>
+                  <div class="duration-quick-adjust">
+                    <span style="font-size: 12px; color: var(--slate-500); align-self: center;">Quick Adjust:</span>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('newExam', 90)">1.5 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('newExam', 120)">2.0 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('newExam', 150)">2.5 Hrs</button>
+                    <button type="button" class="btn-chip" onclick="adjustTimeDuration('newExam', 180)">3.0 Hrs</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Schedule Examination Paper</button>
+          </div>
+        </form>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Session & Timings</th>
+                <th>Year</th>
+                <th>Branch</th>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="examsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Student Rosters & Admin Creation -->
+    <div id="tab-students" class="tab-pane">
+      <div class="content-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Student Roster & Admin Registration</h3>
+            <p>Authorized administrators can create and enroll new students into any academic year and department.</p>
+          </div>
+          <div>
+            <span class="badge" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+              🔒 Admin Restricted Action
+            </span>
+          </div>
+        </div>
+
+        <!-- Admin Student Creation Form -->
+        <form id="addStudentForm" class="form-panel">
+          <div class="form-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Register / Create New Student (Admin Only)
+          </div>
+          <div class="form-grid">
+            <div class="input-field">
+              <label>Student Full Name:</label>
+              <input type="text" id="newStudentName" class="form-input" placeholder="e.g. Rahul Verma" required>
+            </div>
+            <div class="input-field">
+              <label>Roll Number (Unique ID):</label>
+              <input type="text" id="newStudentRoll" class="form-input" placeholder="e.g. 24CS16" style="text-transform: uppercase;" required>
+            </div>
+            <div class="input-field">
+              <label>Academic Year:</label>
+              <select id="newStudentYear" class="form-select" required>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label>Branch / Department:</label>
+              <select id="newStudentBranch" class="form-select" required>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="MECH">MECH</option>
+                <option value="IT">IT</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Create Student Account</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="roster-stats-row">
+          <div class="roster-stat-pill">
+            <span>1st Year Cohort</span>
+            <strong id="yr1Count">0</strong>
+          </div>
+          <div class="roster-stat-pill">
+            <span>2nd Year Cohort</span>
+            <strong id="yr2Count">0</strong>
+          </div>
+          <div class="roster-stat-pill">
+            <span>3rd Year Cohort</span>
+            <strong id="yr3Count">0</strong>
+          </div>
+          <div class="roster-stat-pill">
+            <span>4th Year Cohort</span>
+            <strong id="yr4Count">0</strong>
+          </div>
+        </div>
+
+        <div class="search-filter-bar">
+          <input type="text" id="studentSearchInput" class="form-input" placeholder="Search by student name, roll number (e.g. 24CS01), or branch...">
+          <select id="studentFilterYear" class="form-select" style="max-width: 200px;">
+            <option value="">All Academic Years</option>
+            <option value="1">1st Year Only</option>
+            <option value="2">2nd Year Only</option>
+            <option value="3">3rd Year Only</option>
+            <option value="4">4th Year Only</option>
+          </select>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Roll Number</th>
+                <th>Student Full Name</th>
+                <th>Academic Year</th>
+                <th>Branch / Dept</th>
+                <th>Enrolment Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: Classrooms & Halls Management -->
     <div id="tab-rooms" class="tab-pane">
       <div class="content-card">
         <div class="card-header-row">
@@ -998,10 +1291,7 @@
         </div>
 
         <form id="addRoomForm" class="form-panel">
-          <div class="form-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add New Classroom / Exam Hall
-          </div>
+          <div class="form-panel-title">Add New Classroom / Exam Hall</div>
           <div class="form-grid">
             <div class="input-field">
               <label>Hall / Room No:</label>
@@ -1043,164 +1333,15 @@
       </div>
     </div>
 
-    <!-- TAB 3: Exam Timetable Scheduling -->
-    <div id="tab-exams" class="tab-pane">
-      <div class="content-card">
-        <div class="card-header-row">
-          <div class="card-title-group">
-            <h3>Examination Timetable & Papers</h3>
-            <p>Schedule exam dates, sessions, academic year levels, branches, and subject codes.</p>
-          </div>
-          <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;"><span id="examCountBadge">20</span> Papers Scheduled</span>
-        </div>
-
-        <form id="addExamForm" class="form-panel">
-          <div class="form-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Schedule New Examination Paper
-          </div>
-          <div class="form-grid">
-            <div class="input-field">
-              <label>Exam Date:</label>
-              <input type="date" id="newExamDate" class="form-input" required>
-            </div>
-            <div class="input-field">
-              <label>Session:</label>
-              <select id="newExamSession" class="form-select" required>
-                <option value="Morning (09:30 AM - 12:30 PM)">Morning (09:30 AM - 12:30 PM)</option>
-                <option value="Afternoon (02:00 PM - 05:00 PM)">Afternoon (02:00 PM - 05:00 PM)</option>
-              </select>
-            </div>
-            <div class="input-field">
-              <label>Academic Year:</label>
-              <select id="newExamYear" class="form-select" required>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-              </select>
-            </div>
-            <div class="input-field">
-              <label>Branch / Dept:</label>
-              <select id="newExamBranch" class="form-select" required>
-                <option value="CSE">CSE</option>
-                <option value="ECE">ECE</option>
-                <option value="MECH">MECH</option>
-                <option value="IT">IT</option>
-              </select>
-            </div>
-            <div class="input-field">
-              <label>Subject Code:</label>
-              <input type="text" id="newExamCode" class="form-input" placeholder="e.g. CS301" required>
-            </div>
-            <div class="input-field">
-              <label>Subject Name:</label>
-              <input type="text" id="newExamSubject" class="form-input" placeholder="e.g. Operating Systems" required>
-            </div>
-            <div>
-              <button type="submit" class="btn btn-primary" style="width: 100%;">Schedule Exam</button>
-            </div>
-          </div>
-        </form>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Session</th>
-                <th>Year</th>
-                <th>Branch</th>
-                <th>Subject Code</th>
-                <th>Subject Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="examsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 4: Student Rosters Directory -->
-    <div id="tab-students" class="tab-pane">
-      <div class="content-card">
-        <div class="card-header-row">
-          <div class="card-title-group">
-            <h3>Student Roster & Cohort Directory</h3>
-            <p>Manage and inspect registered students across all academic years and engineering branches.</p>
-          </div>
-        </div>
-
-        <div class="roster-stats-row">
-          <div class="roster-stat-pill">
-            <span>1st Year Cohort</span>
-            <strong id="yr1Count">0</strong>
-          </div>
-          <div class="roster-stat-pill">
-            <span>2nd Year Cohort</span>
-            <strong id="yr2Count">0</strong>
-          </div>
-          <div class="roster-stat-pill">
-            <span>3rd Year Cohort</span>
-            <strong id="yr3Count">0</strong>
-          </div>
-          <div class="roster-stat-pill">
-            <span>4th Year Cohort</span>
-            <strong id="yr4Count">0</strong>
-          </div>
-        </div>
-
-        <div class="search-filter-bar">
-          <input type="text" id="studentSearchInput" class="form-input" placeholder="Search by student name, roll number (e.g. 24CS01), or branch...">
-          <select id="studentFilterYear" class="form-select" style="max-width: 200px;">
-            <option value="">All Academic Years</option>
-            <option value="1">1st Year Only</option>
-            <option value="2">2nd Year Only</option>
-            <option value="3">3rd Year Only</option>
-            <option value="4">4th Year Only</option>
-          </select>
-        </div>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Roll Number</th>
-                <th>Student Full Name</th>
-                <th>Academic Year</th>
-                <th>Branch / Dept</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="studentsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 5: Maintenance & Data Reset -->
+    <!-- TAB 6: Maintenance & Reset -->
     <div id="tab-reset" class="tab-pane">
       <div class="content-card" style="max-width: 680px; margin: 0 auto; text-align: center;">
         <div style="width: 56px; height: 56px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto;">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
-        <h3 style="font-size: 22px; font-weight: 800; color: var(--slate-900);">Database Reset & Sample Data</h3>
-        <p style="color: var(--slate-500); font-size: 14px; margin: 8px 0 24px 0;">Restore the comprehensive college examination test dataset with 200 students across 4 years, 5 examination halls, and 20 scheduled papers.</p>
-        
-        <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 24px; text-align: left; font-size: 13px; color: var(--slate-600);">
-          <strong>What will be restored:</strong>
-          <ul style="margin: 8px 0 0 20px;">
-            <li>200 Students with realistic names across 1st to 4th year</li>
-            <li>5 Examination Halls (Halls 101, 102, 201, 202, Seminar Hall 1)</li>
-            <li>20 Scheduled exam papers with codes and sessions</li>
-            <li>Pre-generated seating arrangement for 2026-10-15</li>
-          </ul>
-        </div>
-
-        <button onclick="handleSystemReset()" class="btn btn-primary" style="background: #dc2626; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);">
-          Restore Default College Dataset
-        </button>
+        <h3 style="font-size: 22px; font-weight: 800; color: var(--slate-900);">Database Reset & Seed Data</h3>
+        <p style="color: var(--slate-500); font-size: 14px; margin: 8px 0 24px 0;">Restore default college examination dataset with 200 students across 4 years, 5 examination halls, and 20 scheduled papers.</p>
+        <button onclick="handleSystemReset()" class="btn btn-primary" style="background: #dc2626;">Restore Default College Dataset</button>
       </div>
     </div>
 
@@ -1222,7 +1363,7 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Tab Navigation
+    // Tab Switching
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
@@ -1236,6 +1377,7 @@
       if (tabId === 'tab-rooms') renderRoomsTable();
       if (tabId === 'tab-exams') renderExamsTable();
       if (tabId === 'tab-students') renderStudentsTable();
+      if (tabId === 'tab-calendar') renderCalendar();
       if (tabId === 'tab-seating') populateSeatingDropdowns();
       updateKPIs();
     }
@@ -1260,46 +1402,215 @@
       if (examBadge) examBadge.textContent = exams.length;
     }
 
-    // Populate Seating Form Dropdowns
+    // ==========================================
+    // Interactive Time & Duration Calculation
+    // ==========================================
+    function updateDuration(prefix) {
+      const startInput = document.getElementById(`${prefix}StartTime`);
+      const endInput = document.getElementById(`${prefix}EndTime`);
+      const calcLabel = document.getElementById(`${prefix}CalcDuration`);
+      if (!startInput || !endInput || !calcLabel) return;
+
+      const timing = computeSessionTiming(startInput.value, endInput.value);
+      calcLabel.textContent = timing.durationText;
+    }
+
+    function adjustTimeDuration(prefix, targetMinutes) {
+      const startInput = document.getElementById(`${prefix}StartTime`);
+      const endInput = document.getElementById(`${prefix}EndTime`);
+      if (!startInput || !endInput) return;
+
+      const [sh, sm] = (startInput.value || '09:30').split(':').map(Number);
+      const totalMinutes = sh * 60 + sm + targetMinutes;
+      const endH = Math.floor(totalMinutes / 60) % 24;
+      const endM = totalMinutes % 60;
+
+      endInput.value = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+      updateDuration(prefix);
+    }
+
+    document.getElementById('planStartTime').addEventListener('input', () => updateDuration('plan'));
+    document.getElementById('planEndTime').addEventListener('input', () => updateDuration('plan'));
+    document.getElementById('newExamStartTime').addEventListener('input', () => updateDuration('newExam'));
+    document.getElementById('newExamEndTime').addEventListener('input', () => updateDuration('newExam'));
+
+    // Handle Session Preset Changes
+    document.getElementById('planSessionType').addEventListener('change', function() {
+      const val = this.value;
+      if (val === 'Morning') {
+        document.getElementById('planStartTime').value = '09:30';
+        document.getElementById('planEndTime').value = '12:30';
+      } else if (val === 'Afternoon') {
+        document.getElementById('planStartTime').value = '14:00';
+        document.getElementById('planEndTime').value = '17:00';
+      } else if (val === 'Evening') {
+        document.getElementById('planStartTime').value = '17:30';
+        document.getElementById('planEndTime').value = '19:30';
+      }
+      updateDuration('plan');
+    });
+
+    document.getElementById('newExamSessionPreset').addEventListener('change', function() {
+      const val = this.value;
+      if (val === 'Morning') {
+        document.getElementById('newExamStartTime').value = '09:30';
+        document.getElementById('newExamEndTime').value = '12:30';
+      } else if (val === 'Afternoon') {
+        document.getElementById('newExamStartTime').value = '14:00';
+        document.getElementById('newExamEndTime').value = '17:00';
+      } else if (val === 'Evening') {
+        document.getElementById('newExamStartTime').value = '17:30';
+        document.getElementById('newExamEndTime').value = '19:30';
+      }
+      updateDuration('newExam');
+    });
+
+    // ==========================================
+    // Full Interactive Calendar Implementation
+    // ==========================================
+    let currentCalDate = new Date(2026, 9, 15); // Default Oct 2026
+    let selectedCalDayStr = '2026-10-15';
+
+    function renderCalendar() {
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      document.getElementById('calMonthYearTitle').textContent = `${monthNames[month]} ${year}`;
+
+      const grid = document.getElementById('calendarDaysGrid');
+      grid.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const prevMonthDays = new Date(year, month, 0).getDate();
+
+      const exams = getExams();
+      // Count exams per date string YYYY-MM-DD
+      const examsCountByDate = {};
+      exams.forEach(ex => {
+        examsCountByDate[ex.exam_date] = (examsCountByDate[ex.exam_date] || 0) + 1;
+      });
+
+      // Previous month trailing days
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const d = prevMonthDays - i;
+        const cell = document.createElement('div');
+        cell.className = 'cal-day-cell other-month';
+        cell.innerHTML = `<span class="cal-day-num">${d}</span>`;
+        grid.appendChild(cell);
+      }
+
+      // Current month days
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const cell = document.createElement('div');
+        cell.className = 'cal-day-cell';
+        if (dateStr === selectedCalDayStr) cell.classList.add('selected');
+
+        const examCount = examsCountByDate[dateStr] || 0;
+        let badgeHtml = '';
+        if (examCount > 0) {
+          cell.classList.add('has-exams');
+          badgeHtml = `<span class="cal-exam-badge">${examCount} Exam${examCount > 1 ? 's' : ''}</span>`;
+        }
+
+        cell.innerHTML = `
+          <span class="cal-day-num">${day}</span>
+          ${badgeHtml}
+        `;
+
+        cell.onclick = () => selectCalendarDate(dateStr);
+        grid.appendChild(cell);
+      }
+
+      updateCalendarPreview(selectedCalDayStr);
+    }
+
+    function changeCalMonth(delta) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    function goToCurrentMonth() {
+      currentCalDate = new Date();
+      selectedCalDayStr = `${currentCalDate.getFullYear()}-${String(currentCalDate.getMonth() + 1).padStart(2, '0')}-${String(currentCalDate.getDate()).padStart(2, '0')}`;
+      renderCalendar();
+    }
+
+    function selectCalendarDate(dateStr) {
+      selectedCalDayStr = dateStr;
+      document.querySelectorAll('.cal-day-cell').forEach(c => c.classList.remove('selected'));
+      renderCalendar();
+    }
+
+    function updateCalendarPreview(dateStr) {
+      document.getElementById('calSelectedDateText').textContent = formatDisplayDate(dateStr);
+      const exams = getExams().filter(e => e.exam_date === dateStr);
+      const listEl = document.getElementById('calScheduledExamsList');
+
+      if (exams.length > 0) {
+        const subjects = exams.map(e => `<strong>${e.branch} Year ${e.year}</strong>: ${e.subject} (${e.subject_code})`).join(' &bull; ');
+        listEl.innerHTML = `<span style="color:#0284c7; font-weight:700;">${exams.length} Examination Paper(s) Scheduled:</span><br>${subjects}`;
+      } else {
+        listEl.innerHTML = '<span style="color:#64748b;">No examinations scheduled on this date yet. You can schedule exams or generate seating directly for this date!</span>';
+      }
+    }
+
+    function useDateForScheduling() {
+      document.getElementById('newExamDate').value = selectedCalDayStr;
+      switchTab('tab-exams');
+      showToast(`Selected date ${formatDisplayDate(selectedCalDayStr)} for exam scheduling.`);
+    }
+
+    function useDateForSeating() {
+      document.getElementById('planDate').value = selectedCalDayStr;
+      switchTab('tab-seating');
+      showToast(`Selected date ${formatDisplayDate(selectedCalDayStr)} for seating generation.`);
+    }
+
+    // ==========================================
+    // Seating Generator Form & Logic
+    // ==========================================
     function populateSeatingDropdowns() {
       const dates = getDistinctExamDates();
-      const dateSelect = document.getElementById('planDate');
-      const sessionSelect = document.getElementById('planSession');
+      const quickSelect = document.getElementById('quickDateSelect');
+      const planDateInput = document.getElementById('planDate');
 
-      dateSelect.innerHTML = '';
+      quickSelect.innerHTML = '<option value="">-- Or Pick from Scheduled Dates --</option>';
       dates.forEach(d => {
         const opt = document.createElement('option');
         opt.value = d;
-        opt.textContent = formatDisplayDate(d);
-        dateSelect.appendChild(opt);
+        opt.textContent = `${formatDisplayDate(d)} (${getExams().filter(e => e.exam_date === d).length} Exams)`;
+        quickSelect.appendChild(opt);
       });
 
-      function updateSessions() {
-        const d = dateSelect.value;
-        const sessions = getSessionsForDate(d);
-        sessionSelect.innerHTML = '';
-        sessions.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          sessionSelect.appendChild(opt);
-        });
+      if (!planDateInput.value) {
+        planDateInput.value = dates[0] || '2026-10-15';
       }
 
-      dateSelect.onchange = updateSessions;
-      if (dates.length > 0) updateSessions();
-    }
-    populateSeatingDropdowns();
+      quickSelect.onchange = function() {
+        if (this.value) {
+          planDateInput.value = this.value;
+          selectedCalDayStr = this.value;
+        }
+      };
 
-    // Seating Generation Form Submit
+      updateDuration('plan');
+    }
+
     document.getElementById('planForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const d = document.getElementById('planDate').value;
-      const s = document.getElementById('planSession').value;
+      const slot = document.getElementById('planSessionType').value;
+      const st = document.getElementById('planStartTime').value;
+      const et = document.getElementById('planEndTime').value;
       const y = document.getElementById('planYear').value;
 
+      const timing = computeSessionTiming(st, et, slot);
+      const sessionString = timing.sessionString;
       const yearsParam = y === 'all' ? ['all'] : [y];
-      const result = generateSeatingForDate(d, s, yearsParam);
+
+      const result = generateSeatingForDate(d, sessionString, yearsParam);
 
       if (result.error) {
         showToast(result.message);
@@ -1316,7 +1627,7 @@
       const title = document.getElementById('planSummaryTitle');
       const list = document.getElementById('roomsOutputList');
 
-      title.textContent = `Schedule: ${result.formatted_date} (${result.session})`;
+      title.textContent = `Schedule: ${result.formatted_date} — ${result.session}`;
       banner.textContent = `Successfully allocated ${result.total_students_scheduled} students across ${result.rooms_used} examination halls with alternating column layout.`;
 
       list.innerHTML = '';
@@ -1324,12 +1635,7 @@
         const div = document.createElement('div');
         div.className = 'room-card';
 
-        let leftHtml = `
-          <div class="side-card side-left">
-            <span class="side-pill side-pill-left">Column A (Left Bench)</span>
-            <div style="color: var(--slate-400); font-size: 13px;">No allocation</div>
-          </div>`;
-
+        let leftHtml = `<div class="side-card side-left"><span class="side-pill side-pill-left">Column A (Left Bench)</span><div style="color: var(--slate-400); font-size: 13px;">No allocation</div></div>`;
         if (r.left) {
           leftHtml = `
             <div class="side-card side-left">
@@ -1340,12 +1646,7 @@
             </div>`;
         }
 
-        let rightHtml = `
-          <div class="side-card side-right">
-            <span class="side-pill side-pill-right">Column B (Right Bench)</span>
-            <div style="color: var(--slate-400); font-size: 13px;">No allocation</div>
-          </div>`;
-
+        let rightHtml = `<div class="side-card side-right"><span class="side-pill side-pill-right">Column B (Right Bench)</span><div style="color: var(--slate-400); font-size: 13px;">No allocation</div></div>`;
         if (r.right) {
           rightHtml = `
             <div class="side-card side-right">
@@ -1360,11 +1661,11 @@
 
         div.innerHTML = `
           <div class="room-card-head">
-            <div class="room-name-block">
+            <div>
               <h4>${r.room_no}</h4>
               <span>Location: ${r.block}</span>
             </div>
-            <div class="room-capacity-meter">
+            <div>
               <span class="capacity-badge">${r.allocated_count} / ${r.total_capacity} Seats (${percentage}% Full)</span>
             </div>
           </div>
@@ -1380,7 +1681,137 @@
       container.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Classroom Table Render
+    // ==========================================
+    // Admin-Only Student Creation & Management
+    // ==========================================
+    document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('newStudentName').value.trim();
+      const roll = document.getElementById('newStudentRoll').value.trim().toUpperCase();
+      const year = document.getElementById('newStudentYear').value;
+      const branch = document.getElementById('newStudentBranch').value;
+
+      const res = createStudentByAdmin({ name, roll_no: roll, year, branch });
+      if (!res.success) {
+        showToast(res.message);
+        return;
+      }
+
+      showToast(`Student ${name} (${roll}) registered successfully!`);
+      this.reset();
+      renderStudentsTable();
+      updateKPIs();
+    });
+
+    function handleDeleteStudent(rollNo) {
+      if (confirm(`Are you sure you want to remove student with Roll Number ${rollNo}?`)) {
+        const res = removeStudentByAdmin(rollNo);
+        showToast(res.message);
+        renderStudentsTable();
+        updateKPIs();
+      }
+    }
+
+    function renderStudentsTable() {
+      const students = getStudents();
+      const q = document.getElementById('studentSearchInput').value.toLowerCase();
+      const yFilter = document.getElementById('studentFilterYear').value;
+
+      document.getElementById('yr1Count').textContent = students.filter(s => String(s.year) === '1').length;
+      document.getElementById('yr2Count').textContent = students.filter(s => String(s.year) === '2').length;
+      document.getElementById('yr3Count').textContent = students.filter(s => String(s.year) === '3').length;
+      document.getElementById('yr4Count').textContent = students.filter(s => String(s.year) === '4').length;
+
+      const filtered = students.filter(s => {
+        if (yFilter && String(s.year) !== yFilter) return false;
+        if (q && !s.roll_no.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q) && !s.branch.toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      const tbody = document.getElementById('studentsTableBody');
+      tbody.innerHTML = '';
+
+      filtered.slice(0, 100).forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge-code">${s.roll_no}</span></td>
+          <td><strong>${s.name}</strong></td>
+          <td><span class="badge badge-year">Year ${s.year}</span></td>
+          <td><span class="badge badge-branch">${s.branch}</span></td>
+          <td><span style="color: #10b981; font-weight:600; font-size:12px;">● Enrolled</span></td>
+          <td><button onclick="handleDeleteStudent('${s.roll_no}')" class="btn-danger">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      updateKPIs();
+    }
+
+    document.getElementById('studentSearchInput').addEventListener('input', renderStudentsTable);
+    document.getElementById('studentFilterYear').addEventListener('change', renderStudentsTable);
+
+    // ==========================================
+    // Exam Timetable Table & Form
+    // ==========================================
+    function renderExamsTable() {
+      const exams = getExams();
+      const tbody = document.getElementById('examsTableBody');
+      tbody.innerHTML = '';
+
+      exams.forEach((ex, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${formatDisplayDate(ex.exam_date)}</strong></td>
+          <td><span class="badge" style="background: #f8fafc; border: 1px solid #cbd5e1; font-size:11px;">${ex.session}</span></td>
+          <td><span class="badge badge-year">Year ${ex.year}</span></td>
+          <td><span class="badge badge-branch">${ex.branch}</span></td>
+          <td><span class="badge-code">${ex.subject_code}</span></td>
+          <td><strong>${ex.subject}</strong></td>
+          <td><button onclick="deleteExam(${idx})" class="btn-danger">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      updateKPIs();
+    }
+
+    document.getElementById('addExamForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const dt = document.getElementById('newExamDate').value;
+      const slot = document.getElementById('newExamSessionPreset').value;
+      const st = document.getElementById('newExamStartTime').value;
+      const et = document.getElementById('newExamEndTime').value;
+      const yr = document.getElementById('newExamYear').value;
+      const br = document.getElementById('newExamBranch').value;
+      const cd = document.getElementById('newExamCode').value.trim();
+      const sb = document.getElementById('newExamSubject').value.trim();
+
+      const timing = computeSessionTiming(st, et, slot);
+      const sessionString = timing.sessionString;
+
+      const exams = getExams();
+      exams.push({ id: 'ex_' + Date.now(), exam_date: dt, session: sessionString, year: yr, branch: br, subject_code: cd, subject: sb });
+      saveExams(exams);
+      renderExamsTable();
+      populateSeatingDropdowns();
+      renderCalendar();
+      this.reset();
+      showToast(`Exam paper ${cd} scheduled for Year ${yr} with duration ${timing.durationText}.`);
+    });
+
+    function deleteExam(idx) {
+      if (confirm('Cancel and remove this scheduled examination paper?')) {
+        const exams = getExams();
+        const removed = exams.splice(idx, 1);
+        saveExams(exams);
+        renderExamsTable();
+        populateSeatingDropdowns();
+        renderCalendar();
+        showToast(`Exam ${removed[0].subject_code} removed.`);
+      }
+    }
+
+    // ==========================================
+    // Classrooms Table & Form
+    // ==========================================
     function renderRoomsTable() {
       const rooms = getRooms();
       const tbody = document.getElementById('roomsTableBody');
@@ -1426,94 +1857,7 @@
       }
     }
 
-    // Exam Timetable Table Render
-    function renderExamsTable() {
-      const exams = getExams();
-      const tbody = document.getElementById('examsTableBody');
-      tbody.innerHTML = '';
-
-      exams.forEach((ex, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${formatDisplayDate(ex.exam_date)}</strong></td>
-          <td><span class="badge" style="background: #f8fafc; border: 1px solid #cbd5e1; font-size:11px;">${ex.session}</span></td>
-          <td><span class="badge badge-year">Year ${ex.year}</span></td>
-          <td><span class="badge badge-branch">${ex.branch}</span></td>
-          <td><span class="badge-code">${ex.subject_code}</span></td>
-          <td><strong>${ex.subject}</strong></td>
-          <td><button onclick="deleteExam(${idx})" class="btn-danger">Remove</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      updateKPIs();
-    }
-
-    document.getElementById('addExamForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const dt = document.getElementById('newExamDate').value;
-      const ss = document.getElementById('newExamSession').value;
-      const yr = document.getElementById('newExamYear').value;
-      const br = document.getElementById('newExamBranch').value;
-      const cd = document.getElementById('newExamCode').value.trim();
-      const sb = document.getElementById('newExamSubject').value.trim();
-
-      const exams = getExams();
-      exams.push({ id: 'ex_' + Date.now(), exam_date: dt, session: ss, year: yr, branch: br, subject_code: cd, subject: sb });
-      saveExams(exams);
-      renderExamsTable();
-      populateSeatingDropdowns();
-      this.reset();
-      showToast(`Exam paper ${cd} scheduled for Year ${yr}.`);
-    });
-
-    function deleteExam(idx) {
-      if (confirm('Are you sure you want to cancel and remove this scheduled examination?')) {
-        const exams = getExams();
-        const removed = exams.splice(idx, 1);
-        saveExams(exams);
-        renderExamsTable();
-        populateSeatingDropdowns();
-        showToast(`Exam ${removed[0].subject_code} removed.`);
-      }
-    }
-
-    // Student Roster Directory Render
-    function renderStudentsTable() {
-      const students = getStudents();
-      const q = document.getElementById('studentSearchInput').value.toLowerCase();
-      const yFilter = document.getElementById('studentFilterYear').value;
-
-      document.getElementById('yr1Count').textContent = students.filter(s => s.year === '1').length;
-      document.getElementById('yr2Count').textContent = students.filter(s => s.year === '2').length;
-      document.getElementById('yr3Count').textContent = students.filter(s => s.year === '3').length;
-      document.getElementById('yr4Count').textContent = students.filter(s => s.year === '4').length;
-
-      const filtered = students.filter(s => {
-        if (yFilter && s.year !== yFilter) return false;
-        if (q && !s.roll_no.toLowerCase().includes(q) && !s.name.toLowerCase().includes(q) && !s.branch.toLowerCase().includes(q)) return false;
-        return true;
-      });
-
-      const tbody = document.getElementById('studentsTableBody');
-      tbody.innerHTML = '';
-
-      filtered.slice(0, 100).forEach(s => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><span class="badge-code">${s.roll_no}</span></td>
-          <td><strong>${s.name}</strong></td>
-          <td><span class="badge badge-year">Year ${s.year}</span></td>
-          <td><span class="badge badge-branch">${s.branch}</span></td>
-          <td><span style="color: #10b981; font-weight:600; font-size:12px;">● Enrolled</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      updateKPIs();
-    }
-
-    document.getElementById('studentSearchInput').addEventListener('input', renderStudentsTable);
-    document.getElementById('studentFilterYear').addEventListener('change', renderStudentsTable);
-
+    // System Reset
     function handleSystemReset() {
       if (confirm('Reset all student, classroom, and exam records to the default comprehensive dataset?')) {
         initCollegeData(true);
@@ -1524,6 +1868,8 @@
 
     // Initial Dashboard Setup
     renderRoomsTable();
+    populateSeatingDropdowns();
+    renderCalendar();
     updateKPIs();
   </script>
 </body>

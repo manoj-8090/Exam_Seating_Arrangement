@@ -193,6 +193,100 @@ function getSessionsForDate(date) {
   return sessions;
 }
 
+// Admin-Only Permission Guarded Student Creation
+function createStudentByAdmin(studentData) {
+  if (!isAdminLoggedIn()) {
+    return { success: false, message: 'Permission denied: Only authenticated administrators can register new students.' };
+  }
+
+  const roll = (studentData.roll_no || '').trim().toUpperCase();
+  const name = (studentData.name || '').trim();
+  const year = String(studentData.year || '1').trim();
+  const branch = (studentData.branch || 'CSE').trim().toUpperCase();
+
+  if (!roll || !name) {
+    return { success: false, message: 'Roll number and student name are required.' };
+  }
+
+  const students = getStudents();
+  if (students.some(s => s.roll_no.toUpperCase() === roll)) {
+    return { success: false, message: `Student with Roll Number "${roll}" already exists.` };
+  }
+
+  const newStudent = {
+    roll_no: roll,
+    name: name,
+    year: year,
+    branch: branch,
+    created_at: new Date().toISOString()
+  };
+
+  students.unshift(newStudent);
+  saveStudents(students);
+
+  return { success: true, message: `Student ${name} (${roll}) registered successfully!`, student: newStudent };
+}
+
+// Admin-Only Student Removal
+function removeStudentByAdmin(rollNo) {
+  if (!isAdminLoggedIn()) {
+    return { success: false, message: 'Permission denied: Admin authentication required.' };
+  }
+
+  const cleanRoll = rollNo.trim().toUpperCase();
+  let students = getStudents();
+  const initialLen = students.length;
+  students = students.filter(s => s.roll_no.toUpperCase() !== cleanRoll);
+
+  if (students.length === initialLen) {
+    return { success: false, message: `Student ${cleanRoll} not found.` };
+  }
+
+  saveStudents(students);
+  return { success: true, message: `Student ${cleanRoll} removed successfully.` };
+}
+
+// Time & Duration Calculator Utility
+function computeSessionTiming(startTime, endTime, label = 'Custom Session') {
+  if (!startTime || !endTime) {
+    return { durationMinutes: 180, formattedText: '3 Hours 0 Mins', sessionString: label };
+  }
+
+  const [sh, sm] = startTime.split(':').map(Number);
+  const [eh, em] = endTime.split(':').map(Number);
+
+  let startTotal = sh * 60 + sm;
+  let endTotal = eh * 60 + em;
+
+  if (endTotal < startTotal) {
+    endTotal += 24 * 60; // Crosses midnight
+  }
+
+  const diffMinutes = Math.max(0, endTotal - startTotal);
+  const hours = Math.floor(diffMinutes / 60);
+  const mins = diffMinutes % 60;
+
+  function to12h(h, m) {
+    const ampm = h >= 12 && h < 24 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  const startFormatted = to12h(sh, sm);
+  const endFormatted = to12h(eh, em);
+  const durationText = `${hours} Hour${hours !== 1 ? 's' : ''}${mins > 0 ? ` ${mins} Mins` : ''}`;
+
+  return {
+    startFormatted,
+    endFormatted,
+    durationMinutes: diffMinutes,
+    hours,
+    mins,
+    durationText,
+    sessionString: `${label} (${startFormatted} - ${endFormatted}) [${durationText}]`
+  };
+}
+
 /**
  * Advanced College Seating Generation Algorithm
  * Interleaves students across academic years and branches:
@@ -201,11 +295,57 @@ function getSessionsForDate(date) {
  */
 function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
   const allStudents = getStudents();
-  const allExams = getExams().filter(e => e.exam_date === examDate && (!session || e.session === session));
+  let allExams = getExams().filter(e => e.exam_date === examDate && (!session || e.session === session));
   const rooms = getRooms().sort((a, b) => a.room_no.localeCompare(b.room_no));
 
+  // If no exams match this exact date and session, check for any exams on this date or auto-provision
   if (allExams.length === 0) {
-    return { error: true, message: `No exams scheduled on ${examDate} for session ${session}` };
+    const sameDateExams = getExams().filter(e => e.exam_date === examDate);
+    if (sameDateExams.length > 0) {
+      allExams = sameDateExams;
+    } else {
+      // Auto-schedule curriculum examinations for this newly selected calendar date!
+      const defaultSubjects = {
+        '1_CSE': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
+        '1_ECE': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
+        '1_MECH': { code: 'PHY101', subject: 'Engineering Physics' },
+        '1_IT': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
+        '2_CSE': { code: 'CS201', subject: 'Data Structures & Algorithms' },
+        '2_ECE': { code: 'EC201', subject: 'Digital Logic & Circuit Design' },
+        '2_MECH': { code: 'ME201', subject: 'Fluid Mechanics & Thermodynamics' },
+        '2_IT': { code: 'IT201', subject: 'Object Oriented Programming (Java)' },
+        '3_CSE': { code: 'CS301', subject: 'Database Management Systems' },
+        '3_ECE': { code: 'EC301', subject: 'Microprocessors & Microcontrollers' },
+        '3_MECH': { code: 'ME301', subject: 'Design of Machine Elements' },
+        '3_IT': { code: 'IT301', subject: 'Web Technologies & Cloud Services' },
+        '4_CSE': { code: 'CS401', subject: 'Artificial Intelligence & Deep Learning' },
+        '4_ECE': { code: 'EC401', subject: 'VLSI Design & Embedded Systems' },
+        '4_MECH': { code: 'ME401', subject: 'Refrigeration & Air Conditioning' },
+        '4_IT': { code: 'IT401', subject: 'Information & Cyber Security' }
+      };
+
+      const newExams = [];
+      const currentExams = getExams();
+      const sessionLabel = session || 'Morning (09:30 AM - 12:30 PM)';
+
+      Object.keys(defaultSubjects).forEach((k, idx) => {
+        const [yr, br] = k.split('_');
+        const ex = {
+          id: `ex_${Date.now()}_${idx}`,
+          year: yr,
+          branch: br,
+          subject_code: defaultSubjects[k].code,
+          subject: defaultSubjects[k].subject,
+          exam_date: examDate,
+          session: sessionLabel
+        };
+        newExams.push(ex);
+        currentExams.push(ex);
+      });
+
+      saveExams(currentExams);
+      allExams = newExams;
+    }
   }
 
   // Filter students who actually have an exam scheduled in this session
