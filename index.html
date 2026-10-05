@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Examination Management & Seating Portal</title>
+  <title>Vignan's Lara Institute of Technology & Science | Examination Seating Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
       min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #333;
       padding: 30px 15px;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -21,34 +23,52 @@
     }
 
     .main-wrapper {
-      max-width: 950px;
+      max-width: 980px;
       width: 100%;
       background: #ffffff;
       border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
       overflow: hidden;
-      animation: fadeIn 0.7s ease-in-out;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .portal-header {
-      background: linear-gradient(135deg, #0052cc, #002e80);
+      background: linear-gradient(135deg, #0284c7, #0f172a);
       color: white;
       padding: 35px 30px;
       text-align: center;
     }
 
-    .portal-header h1 {
-      margin: 0 0 10px 0;
-      font-size: 28px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    .inst-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
       font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .portal-header h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      letter-spacing: -0.3px;
+      font-weight: 800;
     }
 
     .portal-header p {
       margin: 0;
       opacity: 0.9;
-      font-size: 15px;
+      font-size: 13.5px;
+      line-height: 1.5;
     }
 
     .content-area {
@@ -63,12 +83,12 @@
     }
 
     .portal-card {
-      border: 1px solid #e1e4e8;
+      border: 1.5px solid #e2e8f0;
       border-radius: 16px;
-      padding: 30px 25px;
+      padding: 32px 26px;
       text-align: center;
       transition: all 0.3s ease;
-      background: #fafbfc;
+      background: #f8fafc;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -76,47 +96,48 @@
 
     .portal-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-      border-color: #0052cc;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      border-color: #0284c7;
     }
 
     .card-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 15px auto;
+      margin: 0 auto 16px auto;
     }
 
     .admin-icon {
-      background: #e6f0ff;
-      color: #0052cc;
+      background: #eff6ff;
+      color: #2563eb;
     }
 
     .student-icon {
-      background: #e6fffa;
-      color: #00a389;
+      background: #f0fdf4;
+      color: #16a34a;
     }
 
     .portal-card h2 {
       margin: 0 0 10px 0;
-      font-size: 20px;
-      color: #1a202c;
+      font-size: 19px;
+      color: #0f172a;
+      font-weight: 800;
     }
 
     .portal-card p {
-      color: #666;
-      font-size: 14px;
+      color: #64748b;
+      font-size: 13.5px;
       line-height: 1.5;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .action-btn {
       padding: 12px 28px;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14.5px;
+      font-weight: 700;
       border-radius: 25px;
       text-decoration: none;
       display: inline-block;
@@ -126,51 +147,56 @@
     }
 
     .btn-admin {
-      background: linear-gradient(135deg, #0052cc, #003e99);
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
       color: white;
-      box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
 
     .btn-admin:hover {
-      background: linear-gradient(135deg, #003e99, #002a66);
+      background: linear-gradient(135deg, #4338ca, #3730a3);
       transform: translateY(-2px);
     }
 
     .btn-student {
-      background: linear-gradient(135deg, #00a389, #007a66);
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
-      box-shadow: 0 4px 12px rgba(0, 163, 137, 0.3);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
     }
 
     .btn-student:hover {
-      background: linear-gradient(135deg, #007a66, #005244);
+      background: linear-gradient(135deg, #0369a1, #075985);
       transform: translateY(-2px);
     }
 
     .info-stats-banner {
-      background: #f1f5f9;
-      border-radius: 12px;
-      padding: 20px 25px;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 22px 25px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       text-align: center;
-      border: 1px solid #e2e8f0;
+      border: 1.5px solid #e2e8f0;
       flex-wrap: wrap;
       gap: 15px;
     }
 
     .stat-item h3 {
       margin: 0;
-      font-size: 22px;
-      color: #0052cc;
+      font-size: 24px;
+      color: #0f172a;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .stat-item span {
-      font-size: 13px;
+      font-size: 12px;
       color: #64748b;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+      display: block;
     }
 
     .seating-features {
@@ -180,19 +206,20 @@
     }
 
     .seating-features h3 {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 12px;
+      font-size: 15px;
+      color: #0f172a;
+      margin-bottom: 14px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      font-weight: 800;
     }
 
     .feature-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
-      font-size: 14px;
-      color: #4a5568;
+      font-size: 13.5px;
+      color: #475569;
     }
 
     .feature-list div {
@@ -202,7 +229,7 @@
 
     .feature-list div::before {
       content: "✓";
-      color: #28a745;
+      color: #10b981;
       font-weight: bold;
       margin-right: 8px;
     }
@@ -218,8 +245,12 @@
 
   <div class="main-wrapper">
     <div class="portal-header">
-      <h1>College Examination Management Portal</h1>
-      <p>Automated Multi-Year Seating Allocation & Examination Timetable System</p>
+      <div class="inst-badge">Autonomous Institution &bull; NAAC 'A+' & NBA Accredited</div>
+      <h1>Vignan's Lara Institute of Technology & Science</h1>
+      <p>
+        Examination Branch &bull; Vadlamudi, Guntur &bull; Automated Seating & Timetable Administration<br>
+        Notice Reference: VLIT/ES/A/15/2026-27/11(E)
+      </p>
     </div>
 
     <div class="content-area">
@@ -228,60 +259,64 @@
         <div class="portal-card">
           <div>
             <div class="card-icon admin-icon">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
               </svg>
             </div>
             <h2>Examination Branch (Admin)</h2>
-            <p>Schedule exam dates, manage classroom capacities, control student rosters, and generate inter-year seating plans.</p>
+            <p>
+              Full facility to enroll & delete students, generate roll ranges, adjust session duration, schedule calendar dates, and generate cross-year seat plans.
+            </p>
           </div>
-          <a href="exam_seating.html" class="action-btn btn-admin">Admin Dashboard Login</a>
+          <a href="admin.html" class="action-btn btn-admin">Admin Dashboard &rarr;</a>
         </div>
 
         <!-- Student Portal Card -->
         <div class="portal-card">
           <div>
             <div class="card-icon student-icon">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 13.5l-7-3.82v4.82l7 3.82 7-3.82v-4.82l-7 3.82z"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
               </svg>
             </div>
-            <h2>Student Seating & Timetable</h2>
-            <p>Enter your Roll Number to instantly find your allotted exam hall, bench side, seat number, and download your exam hall pass.</p>
+            <h2>Student Seating Slip Portal</h2>
+            <p>
+              Enter your Roll Number (e.g. 23FE1A0501 for 4th Yr, 24FE1A for 3rd Yr, 25FE1A for 2nd Yr, 26FE1A for 1st Yr) to download your allotted exam seat pass.
+            </p>
           </div>
-          <a href="student.html" class="action-btn btn-student">Student Search & Login</a>
+          <a href="student.html" class="action-btn btn-student">Search My Seating &nearr;</a>
         </div>
       </div>
 
       <!-- Live Statistics -->
       <div class="info-stats-banner">
         <div class="stat-item">
-          <h3 id="statStudents">200</h3>
+          <h3 id="statStudents">680+</h3>
           <span>Enrolled Students</span>
         </div>
         <div class="stat-item">
-          <h3 id="statYears">4 Years</h3>
-          <span>1st, 2nd, 3rd, 4th Year</span>
+          <h3 id="statYears">4 Cohorts</h3>
+          <span>IV, III, II, I B.Tech</span>
         </div>
         <div class="stat-item">
-          <h3 id="statRooms">5 Halls</h3>
-          <span>200+ Hall Capacity</span>
+          <h3 id="statRooms">16 Halls</h3>
+          <span>1,120 Seating Capacity</span>
         </div>
         <div class="stat-item">
-          <h3 id="statExams">20 Exams</h3>
-          <span>Scheduled Subjects</span>
+          <h3 id="statExams">24 Exams</h3>
+          <span>Active Schedules</span>
         </div>
       </div>
 
       <div class="seating-features">
-        <h3>How College Seating is Allocated:</h3>
+        <h3>Institutional Seating Arrangement Features:</h3>
         <div class="feature-list">
-          <div>Cross-Year & Cross-Branch Interleaving</div>
-          <div>Left / Right Column alternating seat layout</div>
-          <div>No adjacent students write the same exam paper</div>
-          <div>Printable Invigilator & Door Seating Charts</div>
-          <div>Instant Student Hall Ticket & Seating Slips</div>
-          <div>Complete Admin Timetable & Room Management</div>
+          <div>Official VLIT Roll Scheme (23, 24, 25, 26)</div>
+          <div>All 16 Sections (CSE-A..D, ECE-A..C, EEE, ME, IT, AI&ML)</div>
+          <div>Full Admin Facility to Add, Batch-Generate & Delete Students</div>
+          <div>Alternating Column A & Column B Hall Allocation</div>
+          <div>Official Lara Examination Halls (LTF-3 to LLF-14)</div>
+          <div>One-Click Door Chart & Student Hall Pass Printing</div>
         </div>
       </div>
     </div>
@@ -289,7 +324,7 @@
 
   <script src="app.js"></script>
   <script>
-    // Update live stats from client-side storage
+    // Live metrics from storage
     document.getElementById('statStudents').textContent = getStudents().length;
     document.getElementById('statRooms').textContent = getRooms().length + " Halls";
     document.getElementById('statExams').textContent = getExams().length + " Exams";

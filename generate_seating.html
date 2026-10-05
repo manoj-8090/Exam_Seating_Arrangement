@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Examination Seating Arrangement & Door Notice</title>
+  <title>Examination Seating Arrangement & Door Notice | Vignan's Lara Institute</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: #f8fafc;
       color: #1e293b;
       padding: 30px 15px;
@@ -26,23 +25,60 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
 
+    /* Official College Heading */
+    .college-header {
+      text-align: center;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .college-header h1 {
+      font-size: 21px;
+      font-weight: 800;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .college-header p {
+      font-size: 12px;
+      color: #475569;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .notice-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 20px;
       margin-bottom: 25px;
       flex-wrap: wrap;
       gap: 15px;
     }
 
-    .header-bar h1 {
-      margin: 0;
-      font-size: 22px;
-      text-transform: uppercase;
-      color: #0f172a;
-      letter-spacing: 0.5px;
+    .exam-title-badge {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      padding: 6px 14px;
+      border-radius: 20px;
     }
 
     .nav-actions {
@@ -53,21 +89,24 @@
     .btn {
       padding: 10px 20px;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
       border: none;
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-primary {
-      background: #0052cc;
+      background: #0284c7;
       color: white;
     }
 
     .btn-primary:hover {
-      background: #003e99;
+      background: #0369a1;
     }
 
     .btn-secondary {
@@ -82,26 +121,24 @@
     .meta-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
+      margin-bottom: 25px;
     }
 
     .meta-item span {
-      font-size: 12px;
+      font-size: 11.5px;
       color: #64748b;
       text-transform: uppercase;
       display: block;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .meta-item strong {
-      font-size: 16px;
+      font-size: 15px;
       color: #0f172a;
     }
 
@@ -112,12 +149,13 @@
       margin-bottom: 30px;
       overflow: hidden;
       page-break-after: always;
+      background: #fff;
     }
 
     .room-notice-header {
       background: #0f172a;
       color: white;
-      padding: 15px 20px;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -125,15 +163,17 @@
 
     .room-notice-header h2 {
       margin: 0;
-      font-size: 20px;
+      font-size: 18px;
       letter-spacing: 0.5px;
+      font-weight: 800;
     }
 
     .room-notice-header span {
-      font-size: 13px;
+      font-size: 12.5px;
       background: rgba(255, 255, 255, 0.2);
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 12px;
+      font-weight: 700;
     }
 
     .columns-container {
@@ -146,17 +186,17 @@
     }
 
     .column-half:first-child {
-      border-right: 1px dashed #cbd5e1;
-      background: #fafbfc;
+      border-right: 1.5px dashed #cbd5e1;
+      background: #f8faff;
     }
 
     .column-half:last-child {
-      background: #fff;
+      background: #f0fdfa;
     }
 
     .col-title {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 800;
       text-transform: uppercase;
       margin-bottom: 12px;
       padding-bottom: 6px;
@@ -165,12 +205,12 @@
       justify-content: space-between;
     }
 
-    .left-col-title { color: #0052cc; border-color: #0052cc; }
-    .right-col-title { color: #00a389; border-color: #00a389; }
+    .left-col-title { color: #1e40af; border-color: #93c5fd; }
+    .right-col-title { color: #0f766e; border-color: #99f6e4; }
 
     .detail-row {
       margin-bottom: 8px;
-      font-size: 14px;
+      font-size: 13.5px;
     }
 
     .detail-row label {
@@ -180,13 +220,25 @@
       width: 110px;
     }
 
+    .roll-range-box {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      color: #0f172a;
+    }
+
     .roll-grid {
       margin-top: 15px;
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 12px;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
     }
 
@@ -199,61 +251,104 @@
     .roll-tag {
       background: #f1f5f9;
       border: 1px solid #e2e8f0;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 4px;
-      font-family: monospace;
-      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
       font-weight: 600;
+      color: #334155;
+    }
+
+    .notice-signatures {
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1.5px dashed #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .sig-person strong {
+      display: block;
+      color: #0f172a;
+      margin-top: 35px;
     }
 
     @media print {
       body { background: white; padding: 0; }
       .container { box-shadow: none; border-radius: 0; max-width: 100%; padding: 0; }
-      .header-bar .nav-actions { display: none !important; }
-      .room-notice { border: 1px solid #000; margin-bottom: 40px; page-break-after: always; }
-      .room-notice-header { background: #333 !important; color: white !important; -webkit-print-color-adjust: exact; }
+      .nav-actions { display: none !important; }
+      .room-notice { border: 1.5px solid #000; margin-bottom: 30px; page-break-after: always; }
+      .room-notice-header { background: #000 !important; color: white !important; -webkit-print-color-adjust: exact; }
+      .column-half:first-child { border-right: 1px solid #000; }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- Official Institutional Banner -->
+    <div class="college-header">
+      <h1>Vignan's Lara Institute of Technology & Science (Autonomous)</h1>
+      <p>
+        Approved by AICTE New Delhi & Affiliated to JNTUK, Kakinada &bull; Accredited by NAAC 'A+' and NBA (CSE, IT, ECE, EEE, ME)<br>
+        Vadlamudi, Chebrolu (Mandal), Guntur (Dist.), Andhra Pradesh - 522 213
+      </p>
+      <div class="notice-meta-bar">
+        <span>Ref: VLIT/ES/A/15/2026-27/11(E)</span>
+        <span id="displayNoticeDate">Exam Date: 29-09-2026</span>
+        <span id="displayNoticeTimings">Timings: 01:15 to 02:15 PM</span>
+      </div>
+    </div>
+
     <div class="header-bar">
       <div>
-        <h1>Examination Hall Seating Arrangement</h1>
-        <div style="font-size: 13px; color: #64748b; margin-top: 3px;">Official Invigilator & Door Notice Display</div>
+        <span class="exam-title-badge" id="examHeadingText">
+          Assignment-3 / Semester Examination Seating Chart
+        </span>
       </div>
       <div class="nav-actions">
-        <button onclick="window.print()" class="btn btn-primary">&#128438; Print Door Charts</button>
+        <button onclick="window.print()" class="btn btn-primary">🖨️ Print Official Door Charts</button>
         <a href="admin.html" class="btn btn-secondary">&larr; Back to Admin</a>
       </div>
     </div>
 
     <div class="meta-card">
       <div class="meta-item">
-        <span>Exam Date</span>
+        <span>Scheduled Date</span>
         <strong id="planDateText">-</strong>
       </div>
       <div class="meta-item">
-        <span>Exam Session</span>
+        <span>Exam Session & Timings</span>
         <strong id="planSessionText">-</strong>
       </div>
       <div class="meta-item">
-        <span>Total Students Seated</span>
+        <span>Total Candidates Seated</span>
         <strong id="planTotalText">-</strong>
       </div>
       <div class="meta-item">
-        <span>Halls Configured</span>
+        <span>Classrooms Utilized</span>
         <strong id="planRoomsText">-</strong>
       </div>
     </div>
 
     <div id="noticeContainer"></div>
+
+    <div class="notice-signatures">
+      <div class="sig-person">
+        <span>Office of Controller of Examinations</span>
+        <strong>Dr. P. Bhaskara Rao<br><small style="font-weight: normal; color: #64748b;">Controller of Examinations, VLIT</small></strong>
+      </div>
+      <div class="sig-person">
+        <span>Chief Executive Authority</span>
+        <strong>Dr. K. Phaneendra Kumar<br><small style="font-weight: normal; color: #64748b;">Principal, VLIT</small></strong>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
   <script>
-    // Get active plan or generate for default date
     const plans = getAllSeatingPlans();
     let plan = null;
     const activeKey = localStorage.getItem('cs_active_plan');
@@ -263,16 +358,18 @@
     } else {
       const keys = Object.keys(plans);
       if (keys.length > 0) {
-        plan = plans[keys[keys.length - 1]];
+        plan = plans[keys[0]];
       } else {
-        plan = generateSeatingForDate('2026-10-15', 'Morning (09:30 AM - 12:30 PM)', ['all']);
+        plan = generateSeatingForDate('2026-09-29', 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]', ['all']);
       }
     }
 
     if (plan && plan.room_allocations) {
       document.getElementById('planDateText').textContent = plan.formatted_date || plan.exam_date;
+      document.getElementById('displayNoticeDate').textContent = `Exam Date: ${plan.formatted_date || plan.exam_date}`;
       document.getElementById('planSessionText').textContent = plan.session;
-      document.getElementById('planTotalText').textContent = `${plan.total_students_scheduled} Students`;
+      document.getElementById('displayNoticeTimings').textContent = `Timings: ${plan.session}`;
+      document.getElementById('planTotalText').textContent = `${plan.total_students_scheduled} Candidates`;
       document.getElementById('planRoomsText').textContent = `${plan.rooms_used} Halls`;
 
       const container = document.getElementById('noticeContainer');
@@ -290,12 +387,12 @@
             <div class="column-half">
               <div class="col-title left-col-title">
                 <span>Column A (Left Side)</span>
-                <span>${r.left.count} Students</span>
+                <span>${r.left.count} Candidates</span>
               </div>
-              <div class="detail-row"><label>Class / Year:</label> <strong>${r.left.group}</strong></div>
+              <div class="detail-row"><label>Class / Section:</label> <strong>${r.left.group}</strong></div>
               <div class="detail-row"><label>Subject Code:</label> <code>${r.left.subject_code}</code></div>
               <div class="detail-row"><label>Subject Name:</label> <strong>${r.left.subject}</strong></div>
-              <div class="detail-row"><label>Roll Range:</label> <strong>${r.left.roll_range}</strong></div>
+              <div class="detail-row"><label>Roll Range:</label> <span class="roll-range-box">${r.left.roll_range}</span></div>
               <div class="roll-grid">
                 <div class="roll-tags">${rollsHtml}</div>
               </div>
@@ -311,12 +408,12 @@
             <div class="column-half">
               <div class="col-title right-col-title">
                 <span>Column B (Right Side)</span>
-                <span>${r.right.count} Students</span>
+                <span>${r.right.count} Candidates</span>
               </div>
-              <div class="detail-row"><label>Class / Year:</label> <strong>${r.right.group}</strong></div>
+              <div class="detail-row"><label>Class / Section:</label> <strong>${r.right.group}</strong></div>
               <div class="detail-row"><label>Subject Code:</label> <code>${r.right.subject_code}</code></div>
               <div class="detail-row"><label>Subject Name:</label> <strong>${r.right.subject}</strong></div>
-              <div class="detail-row"><label>Roll Range:</label> <strong>${r.right.roll_range}</strong></div>
+              <div class="detail-row"><label>Roll Range:</label> <span class="roll-range-box">${r.right.roll_range}</span></div>
               <div class="roll-grid">
                 <div class="roll-tags">${rollsHtml}</div>
               </div>
@@ -326,8 +423,8 @@
 
         roomDiv.innerHTML = `
           <div class="room-notice-header">
-            <h2>${r.room_no} — ${r.block}</h2>
-            <span>Total Seated: ${r.allocated_count} / ${r.total_capacity}</span>
+            <h2>Hall ${r.room_no} — ${r.block}</h2>
+            <span>Total Seated: ${r.allocated_count} / ${r.total_capacity} Candidates</span>
           </div>
           <div class="columns-container">
             ${leftColHtml}

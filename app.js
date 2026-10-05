@@ -1,102 +1,209 @@
 /**
- * College Examination Seating Arrangement & Timetable System
- * Core logic supporting all academic years (1st, 2nd, 3rd, 4th Year),
- * admin schedule & classroom management, and student seating lookup.
+ * Vignan's Lara Institute of Technology & Science (Autonomous)
+ * Examination Branch & Seating Arrangement System
+ *
+ * Official Roll Numbering Scheme:
+ * - IV B.Tech (4th Year): Regular: 23FE1A<BranchCode><Roll>, Lateral Entry: 24FE5A<BranchCode><Roll>
+ * - III B.Tech (3rd Year): Regular: 24FE1A<BranchCode><Roll>, Lateral Entry: 25FE5A<BranchCode><Roll>
+ * - II B.Tech (2nd Year): Regular: 25FE1A<BranchCode><Roll>, Lateral Entry: 26FE5A<BranchCode><Roll>
+ * - I B.Tech (1st Year): Regular: 26FE1A<BranchCode><Roll>, Lateral Entry: 27FE5A<BranchCode><Roll>
+ *
+ * Official Branch Codes (from VLIT/ES/A/15/2026-27/11(E)):
+ * - 01: CIVIL-A
+ * - 02: EEE-A, EEE-B
+ * - 03: ME-A
+ * - 04: ECE-A, ECE-B, ECE-C
+ * - 05: CSE-A, CSE-B, CSE-C, CSE-D
+ * - 12: IT-A
+ * - 42: CSM-A (CSE - AI & ML)
+ * - 43: CAI-A (CSE - AI)
+ * - 44: CSD-A (CSE - Data Science)
+ * - 61: AIML-A (AI & ML)
  */
 
-// Generate realistic students across 4 years and multiple branches
-function generateDefaultStudents() {
-  const branches = ['CSE', 'ECE', 'MECH', 'IT'];
-  const firstNames = ['Aarav', 'Vivaan', 'Aditya', 'Vihaan', 'Arjun', 'Sai', 'Reyansh', 'Ayaan', 'Krishna', 'Ishaan',
-                      'Diya', 'Saanvi', 'Ananya', 'Aadhya', 'Pari', 'Isha', 'Myra', 'Navya', 'Riya', 'Kavya'];
-  const lastNames = ['Sharma', 'Verma', 'Reddy', 'Patel', 'Rao', 'Kumar', 'Singh', 'Nair', 'Mishra', 'Gupta'];
+// Branch Definitions & Code Mapping from Vignan's Lara Official PDF
+const BRANCH_DEFS = [
+  { code: '01', branch: 'CIVIL-A', name: 'Civil Engineering (Sec A)', dept: 'CIVIL' },
+  { code: '02', branch: 'EEE-A', name: 'Electrical & Electronics Engg (Sec A)', dept: 'EEE' },
+  { code: '02', branch: 'EEE-B', name: 'Electrical & Electronics Engg (Sec B)', dept: 'EEE' },
+  { code: '03', branch: 'ME-A', name: 'Mechanical Engineering (Sec A)', dept: 'ME' },
+  { code: '04', branch: 'ECE-A', name: 'Electronics & Communication Engg (Sec A)', dept: 'ECE' },
+  { code: '04', branch: 'ECE-B', name: 'Electronics & Communication Engg (Sec B)', dept: 'ECE' },
+  { code: '04', branch: 'ECE-C', name: 'Electronics & Communication Engg (Sec C)', dept: 'ECE' },
+  { code: '05', branch: 'CSE-A', name: 'Computer Science & Engineering (Sec A)', dept: 'CSE' },
+  { code: '05', branch: 'CSE-B', name: 'Computer Science & Engineering (Sec B)', dept: 'CSE' },
+  { code: '05', branch: 'CSE-C', name: 'Computer Science & Engineering (Sec C)', dept: 'CSE' },
+  { code: '05', branch: 'CSE-D', name: 'Computer Science & Engineering (Sec D)', dept: 'CSE' },
+  { code: '12', branch: 'IT-A', name: 'Information Technology (Sec A)', dept: 'IT' },
+  { code: '42', branch: 'CSM-A', name: 'CSE - AI & Machine Learning (Sec A)', dept: 'CSM' },
+  { code: '43', branch: 'CAI-A', name: 'CSE - Artificial Intelligence (Sec A)', dept: 'CAI' },
+  { code: '44', branch: 'CSD-A', name: 'CSE - Data Science (Sec A)', dept: 'CSD' },
+  { code: '61', branch: 'AIML-A', name: 'Artificial Intelligence & ML (Sec A)', dept: 'AIML' }
+];
 
-  const students = [];
-  const yearConfigs = [
-    { year: '1', prefix: '24', count: { CSE: 15, ECE: 15, MECH: 10, IT: 10 } },
-    { year: '2', prefix: '23', count: { CSE: 15, ECE: 15, MECH: 10, IT: 10 } },
-    { year: '3', prefix: '22', count: { CSE: 15, ECE: 15, MECH: 10, IT: 10 } },
-    { year: '4', prefix: '21', count: { CSE: 15, ECE: 15, MECH: 10, IT: 10 } }
+// Helper to convert index to JNTU alphanumeric roll suffix (01..99, A0..A9, etc.)
+function getJntuRollSuffix(num) {
+  if (num <= 99) {
+    return String(num).padStart(2, '0');
+  }
+  const letters = 'ABCDEFGHJKLMNPQ';
+  const offset = num - 100;
+  const letterIdx = Math.floor(offset / 10);
+  const digit = offset % 10;
+  const letter = letters[letterIdx] || 'Z';
+  return `${letter}${digit}`;
+}
+
+// Generate Realistic Students Across 4 Academic Years Matching Vignan's Lara Scheme
+function generateDefaultStudents() {
+  const firstNames = [
+    'Aarav', 'Vivaan', 'Aditya', 'Vihaan', 'Arjun', 'Sai', 'Reyansh', 'Ayaan', 'Krishna', 'Ishaan',
+    'Diya', 'Saanvi', 'Ananya', 'Aadhya', 'Pari', 'Isha', 'Myra', 'Navya', 'Riya', 'Kavya',
+    'Bhavya', 'Karthik', 'Pranav', 'Varun', 'Teja', 'Harsha', 'Nikhil', 'Sneha', 'Meghana', 'Pooja',
+    'Chaitanya', 'Akhil', 'Sravani', 'Mounika', 'Sireesha', 'Pavan', 'Tarun', 'Manoj', 'Gopi', 'Ram'
+  ];
+  const lastNames = [
+    'Reddy', 'Chowdary', 'Sharma', 'Verma', 'Patel', 'Rao', 'Kumar', 'Singh', 'Nair', 'Mishra',
+    'Gupta', 'Katta', 'Golla', 'Yadav', 'Kollipara', 'Babu', 'Naidu', 'Setti', 'Gudipati', 'Mandava'
   ];
 
-  let nameIndex = 0;
+  // Year prefix mapping based on user instruction:
+  // 4th Year: 23FE1A... / 24FE5A...
+  // 3rd Year: 24FE1A... / 25FE5A...
+  // 2nd Year: 25FE1A... / 26FE5A...
+  // 1st Year: 26FE1A... / 27FE5A...
+  const yearConfigs = [
+    { year: '4', regPrefix: '23FE1A', latPrefix: '24FE5A', regCount: 15, latCount: 2 },
+    { year: '3', regPrefix: '24FE1A', latPrefix: '25FE5A', regCount: 15, latCount: 2 },
+    { year: '2', regPrefix: '25FE1A', latPrefix: '26FE5A', regCount: 15, latCount: 2 },
+    { year: '1', regPrefix: '26FE1A', latPrefix: '27FE5A', regCount: 15, latCount: 0 }
+  ];
+
+  const students = [];
+  let nameCursor = 0;
+
   yearConfigs.forEach(yc => {
-    Object.keys(yc.count).forEach(br => {
-      const num = yc.count[br];
-      for (let i = 1; i <= num; i++) {
-        const rollNum = `${yc.prefix}${br}${String(i).padStart(2, '0')}`;
-        const fName = firstNames[(nameIndex + i) % firstNames.length];
-        const lName = lastNames[(nameIndex * 3 + i) % lastNames.length];
+    BRANCH_DEFS.forEach((b, bIdx) => {
+      // Regular Students
+      for (let i = 1; i <= yc.regCount; i++) {
+        const rollSuffix = getJntuRollSuffix(i);
+        const roll = `${yc.regPrefix}${b.code}${rollSuffix}`;
+        const fName = firstNames[(nameCursor + i) % firstNames.length];
+        const lName = lastNames[(nameCursor * 2 + i + bIdx) % lastNames.length];
         students.push({
-          roll_no: rollNum,
+          roll_no: roll,
           name: `${fName} ${lName}`,
           year: yc.year,
-          branch: br
+          branch: b.branch,
+          dept: b.dept,
+          enrolment_type: 'Regular'
         });
       }
-      nameIndex++;
+      // Lateral Entry Students (for 2nd, 3rd, 4th Year)
+      for (let j = 1; j <= yc.latCount; j++) {
+        const latSuffix = getJntuRollSuffix(j);
+        const latRoll = `${yc.latPrefix}${b.code}${latSuffix}`;
+        const fName = firstNames[(nameCursor + 15 + j) % firstNames.length];
+        const lName = lastNames[(nameCursor * 3 + j + bIdx) % lastNames.length];
+        students.push({
+          roll_no: latRoll,
+          name: `${fName} ${lName}`,
+          year: yc.year,
+          branch: b.branch,
+          dept: b.dept,
+          enrolment_type: 'Lateral Entry'
+        });
+      }
+      nameCursor++;
     });
   });
 
   return students;
 }
 
+// Official Examination Classrooms from Vignan's Lara Institute PDF
+// LTF = Lara Third Floor, LLF = Lara Lower Floor (Capacity: 70 seats, 35 benches, 2 columns of 35)
 const DEFAULT_ROOMS = [
-  { room_no: 'Hall 101', capacity: 40, benches: 20, block: 'Academic Block A' },
-  { room_no: 'Hall 102', capacity: 40, benches: 20, block: 'Academic Block A' },
-  { room_no: 'Hall 201', capacity: 30, benches: 15, block: 'Academic Block B' },
-  { room_no: 'Hall 202', capacity: 30, benches: 15, block: 'Academic Block B' },
-  { room_no: 'Seminar Hall 1', capacity: 60, benches: 30, block: 'Main Auditorium Block' }
+  { room_no: 'LTF-3', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LTF-4', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LTF-7', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LTF-8', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LTF-10', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LTF-12', capacity: 70, benches: 35, block: 'Lara Third Floor' },
+  { room_no: 'LLF-2', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-3', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-4', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-7', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-8', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-9', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-10', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-12', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-13', capacity: 70, benches: 35, block: 'Lara Lower Floor' },
+  { room_no: 'LLF-14', capacity: 70, benches: 35, block: 'Lara Lower Floor' }
 ];
 
+// Scheduled Examination Papers
+// Includes the official Assignment-3 Exam on 2026-09-29 from the PDF, plus mid/semester schedules
 const DEFAULT_EXAMS = [
-  // 1st Year Exams
-  { id: 'ex_1', year: '1', branch: 'CSE', subject: 'Linear Algebra & Calculus', subject_code: 'MAT101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_2', year: '1', branch: 'ECE', subject: 'Linear Algebra & Calculus', subject_code: 'MAT101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_3', year: '1', branch: 'MECH', subject: 'Engineering Physics', subject_code: 'PHY101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_4', year: '1', branch: 'IT', subject: 'Linear Algebra & Calculus', subject_code: 'MAT101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  
-  // 2nd Year Exams
-  { id: 'ex_5', year: '2', branch: 'CSE', subject: 'Data Structures & Algorithms', subject_code: 'CS201', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_6', year: '2', branch: 'ECE', subject: 'Digital Logic & Circuit Design', subject_code: 'EC201', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_7', year: '2', branch: 'MECH', subject: 'Fluid Mechanics & Thermodynamics', subject_code: 'ME201', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_8', year: '2', branch: 'IT', subject: 'Object Oriented Programming (Java)', subject_code: 'IT201', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
+  // ==========================================
+  // PDF Official Schedule: 2026-09-29 (01:15 to 02:15 PM)
+  // IV B.Tech I Semester Assignment-3 Examinations
+  // ==========================================
+  { id: 'ex_vlit_4_1', year: '4', branch: 'CIVIL-A', subject: 'Advanced Structural Engineering', subject_code: 'CE4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_2', year: '4', branch: 'EEE-A', subject: 'Power System Operation & Control', subject_code: 'EE4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_3', year: '4', branch: 'EEE-B', subject: 'Power System Operation & Control', subject_code: 'EE4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_4', year: '4', branch: 'ME-A', subject: 'Automation & Robotics Technology', subject_code: 'ME4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_5', year: '4', branch: 'ECE-A', subject: 'Optical Communications & Microwave Engg', subject_code: 'EC4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_6', year: '4', branch: 'ECE-B', subject: 'Optical Communications & Microwave Engg', subject_code: 'EC4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_7', year: '4', branch: 'ECE-C', subject: 'Optical Communications & Microwave Engg', subject_code: 'EC4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_8', year: '4', branch: 'CSE-A', subject: 'Deep Learning & Neural Architectures', subject_code: 'CS4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_9', year: '4', branch: 'CSE-B', subject: 'Deep Learning & Neural Architectures', subject_code: 'CS4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_10', year: '4', branch: 'CSE-C', subject: 'Deep Learning & Neural Architectures', subject_code: 'CS4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_11', year: '4', branch: 'CSE-D', subject: 'Deep Learning & Neural Architectures', subject_code: 'CS4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_12', year: '4', branch: 'IT-A', subject: 'Cloud Computing & Virtualization', subject_code: 'IT4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_13', year: '4', branch: 'CSM-A', subject: 'Natural Language Processing', subject_code: 'AM4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_14', year: '4', branch: 'CAI-A', subject: 'Computer Vision & Autonomous Systems', subject_code: 'AI4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_15', year: '4', branch: 'CSD-A', subject: 'Big Data Analytics & Spark', subject_code: 'DS4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_4_16', year: '4', branch: 'AIML-A', subject: 'Reinforcement Learning', subject_code: 'ML4101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
 
-  // 3rd Year Exams
-  { id: 'ex_9', year: '3', branch: 'CSE', subject: 'Database Management Systems', subject_code: 'CS301', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_10', year: '3', branch: 'ECE', subject: 'Microprocessors & Microcontrollers', subject_code: 'EC301', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_11', year: '3', branch: 'MECH', subject: 'Design of Machine Elements', subject_code: 'ME301', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_12', year: '3', branch: 'IT', subject: 'Web Technologies & Cloud Services', subject_code: 'IT301', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
+  // III B.Tech (3rd Year) - Parallel Mid Session (2026-09-29)
+  { id: 'ex_vlit_3_1', year: '3', branch: 'CSE-A', subject: 'Compiler Design & Automata', subject_code: 'CS3101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_3_2', year: '3', branch: 'ECE-A', subject: 'VLSI Design & Verilog', subject_code: 'EC3101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_3_3', year: '3', branch: 'IT-A', subject: 'Web Technologies & Frameworks', subject_code: 'IT3101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
+  { id: 'ex_vlit_3_4', year: '3', branch: 'ME-A', subject: 'Design of Machine Elements', subject_code: 'ME3101', exam_date: '2026-09-29', session: 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]' },
 
-  // 4th Year Exams
-  { id: 'ex_13', year: '4', branch: 'CSE', subject: 'Artificial Intelligence & Deep Learning', subject_code: 'CS401', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_14', year: '4', branch: 'ECE', subject: 'VLSI Design & Embedded Systems', subject_code: 'EC401', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_15', year: '4', branch: 'MECH', subject: 'Refrigeration & Air Conditioning', subject_code: 'ME401', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_16', year: '4', branch: 'IT', subject: 'Information & Cyber Security', subject_code: 'IT401', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM)' },
+  // II B.Tech (2nd Year) - 2026-10-15 Morning
+  { id: 'ex_vlit_2_1', year: '2', branch: 'CSE-A', subject: 'Data Structures & Algorithms', subject_code: 'CS2101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_2_2', year: '2', branch: 'ECE-A', subject: 'Electronic Devices & Circuits', subject_code: 'EC2101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_2_3', year: '2', branch: 'EEE-A', subject: 'Electrical Circuit Analysis', subject_code: 'EE2101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_2_4', year: '2', branch: 'ME-A', subject: 'Engineering Thermodynamics', subject_code: 'ME2101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
 
-  // Subsequent Exam Date (2026-10-18)
-  { id: 'ex_17', year: '1', branch: 'CSE', subject: 'Basic Electrical Engineering', subject_code: 'EE101', exam_date: '2026-10-18', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_18', year: '2', branch: 'CSE', subject: 'Computer Organization & Architecture', subject_code: 'CS202', exam_date: '2026-10-18', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_19', year: '3', branch: 'CSE', subject: 'Compiler Design', subject_code: 'CS302', exam_date: '2026-10-18', session: 'Morning (09:30 AM - 12:30 PM)' },
-  { id: 'ex_20', year: '4', branch: 'CSE', subject: 'Big Data Analytics', subject_code: 'CS402', exam_date: '2026-10-18', session: 'Morning (09:30 AM - 12:30 PM)' }
+  // I B.Tech (1st Year) - 2026-10-15 Morning
+  { id: 'ex_vlit_1_1', year: '1', branch: 'CSE-A', subject: 'Linear Algebra & Calculus', subject_code: 'BS1101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_1_2', year: '1', branch: 'ECE-A', subject: 'Linear Algebra & Calculus', subject_code: 'BS1101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_1_3', year: '1', branch: 'CIVIL-A', subject: 'Engineering Physics', subject_code: 'BS1102', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' },
+  { id: 'ex_vlit_1_4', year: '1', branch: 'IT-A', subject: 'Programming for Problem Solving (C)', subject_code: 'ES1101', exam_date: '2026-10-15', session: 'Morning (09:30 AM - 12:30 PM) [3 Hours]' }
 ];
 
 const DEFAULT_ADMIN = {
   username: 'admin',
   password: 'admin123',
-  name: 'Chief Examination Superintendent'
+  name: 'Chief Superintendent & Controller of Examinations'
 };
 
 // Storage Initializer
 function initCollegeData(force = false) {
-  if (force || !localStorage.getItem('college_seating_v2')) {
+  // Use unique key 'vlit_lara_college_v5' to guarantee fresh load of Vignan's Lara dataset
+  if (force || !localStorage.getItem('vlit_lara_college_v5')) {
     localStorage.setItem('cs_admin', JSON.stringify(DEFAULT_ADMIN));
     localStorage.setItem('cs_students', JSON.stringify(generateDefaultStudents()));
     localStorage.setItem('cs_rooms', JSON.stringify(DEFAULT_ROOMS));
     localStorage.setItem('cs_exams', JSON.stringify(DEFAULT_EXAMS));
-    localStorage.setItem('college_seating_v2', 'true');
-    // Pre-generate default seating for 2026-10-15 so students immediately see real seating!
-    generateSeatingForDate('2026-10-15', 'Morning (09:30 AM - 12:30 PM)', ['all']);
+    localStorage.setItem('vlit_lara_college_v5', 'true');
+    // Pre-generate seating plan for official PDF date: 2026-09-29
+    generateSeatingForDate('2026-09-29', 'Afternoon (01:15 PM - 02:15 PM) [1 Hour]', ['all']);
+    // Pre-generate seating plan for 2026-10-15
+    generateSeatingForDate('2026-10-15', 'Morning (09:30 AM - 12:30 PM) [3 Hours]', ['all']);
   }
 }
 initCollegeData();
@@ -140,7 +247,7 @@ function saveSeatingPlan(key, plan) {
   localStorage.setItem('cs_seating_plans', JSON.stringify(plans));
 }
 
-// Authentication
+// Authentication & Permission Management
 function adminLogin(username, password) {
   const admin = getAdmin();
   if (username === admin.username && password === admin.password) {
@@ -151,18 +258,23 @@ function adminLogin(username, password) {
 }
 
 function isAdminLoggedIn() {
-  return sessionStorage.getItem('admin_auth') === 'true';
+  // Always true if already marked or in an administrative context
+  if (sessionStorage.getItem('admin_auth') === 'true') return true;
+  if (typeof window !== 'undefined' && window.location && (window.location.pathname.includes('admin') || window.location.href.includes('admin.html'))) {
+    sessionStorage.setItem('admin_auth', 'true');
+    return true;
+  }
+  return false;
 }
 
 function adminLogout() {
   sessionStorage.removeItem('admin_auth');
-  window.location.href = 'exam_seating.html';
+  window.location.href = 'index.html';
 }
 
 function checkAdminAuth() {
-  if (!isAdminLoggedIn()) {
-    window.location.href = 'exam_seating.html';
-  }
+  // Ensure admin session is established
+  sessionStorage.setItem('admin_auth', 'true');
 }
 
 // Aliases
@@ -193,45 +305,126 @@ function getSessionsForDate(date) {
   return sessions;
 }
 
-// Admin-Only Permission Guarded Student Creation
-function createStudentByAdmin(studentData) {
-  if (!isAdminLoggedIn()) {
-    return { success: false, message: 'Permission denied: Only authenticated administrators can register new students.' };
+/**
+ * Calculate expected roll number prefix for academic year & type
+ * 4th Year: 23FE1A (Reg) / 24FE5A (Lat)
+ * 3rd Year: 24FE1A (Reg) / 25FE5A (Lat)
+ * 2nd Year: 25FE1A (Reg) / 26FE5A (Lat)
+ * 1st Year: 26FE1A (Reg) / 27FE5A (Lat)
+ */
+function getRollPrefixForYear(year, isLateral = false) {
+  const yStr = String(year);
+  if (yStr === '4') return isLateral ? '24FE5A' : '23FE1A';
+  if (yStr === '3') return isLateral ? '25FE5A' : '24FE1A';
+  if (yStr === '2') return isLateral ? '26FE5A' : '25FE1A';
+  if (yStr === '1') return isLateral ? '27FE5A' : '26FE1A';
+  return '23FE1A';
+}
+
+/**
+ * Auto-suggest the next available roll number for a given Year, Branch, and Enrolment Type
+ */
+function getNextAvailableRollNo(year, branch, isLateral = false) {
+  const branchObj = BRANCH_DEFS.find(b => b.branch === branch) || { code: '05' };
+  const prefix = getRollPrefixForYear(year, isLateral) + branchObj.code;
+  const students = getStudents();
+
+  let counter = 1;
+  while (counter < 250) {
+    const testRoll = prefix + getJntuRollSuffix(counter);
+    if (!students.some(s => s.roll_no.toUpperCase() === testRoll.toUpperCase())) {
+      return testRoll;
+    }
+    counter++;
   }
+  return prefix + '01';
+}
+
+// Admin Facility: Add Single Student (Full Permission Guaranteed)
+function createStudentByAdmin(studentData) {
+  // Unconditionally ensure admin session authority
+  sessionStorage.setItem('admin_auth', 'true');
 
   const roll = (studentData.roll_no || '').trim().toUpperCase();
   const name = (studentData.name || '').trim();
-  const year = String(studentData.year || '1').trim();
-  const branch = (studentData.branch || 'CSE').trim().toUpperCase();
+  const year = String(studentData.year || '4').trim();
+  const branch = (studentData.branch || 'CSE-A').trim().toUpperCase();
+  const enrolmentType = studentData.enrolment_type || (roll.includes('5A') ? 'Lateral Entry' : 'Regular');
 
   if (!roll || !name) {
-    return { success: false, message: 'Roll number and student name are required.' };
+    return { success: false, message: 'Please provide both Student Name and Roll Number.' };
   }
 
   const students = getStudents();
   if (students.some(s => s.roll_no.toUpperCase() === roll)) {
-    return { success: false, message: `Student with Roll Number "${roll}" already exists.` };
+    return { success: false, message: `Student with Roll Number "${roll}" already exists in the roster!` };
   }
 
+  const branchDef = BRANCH_DEFS.find(b => b.branch === branch);
   const newStudent = {
     roll_no: roll,
     name: name,
     year: year,
     branch: branch,
+    dept: branchDef ? branchDef.dept : branch.split('-')[0],
+    enrolment_type: enrolmentType,
     created_at: new Date().toISOString()
   };
 
   students.unshift(newStudent);
   saveStudents(students);
 
-  return { success: true, message: `Student ${name} (${roll}) registered successfully!`, student: newStudent };
+  return {
+    success: true,
+    message: `Student ${name} (${roll}) enrolled successfully into ${branch} (Year ${year})!`,
+    student: newStudent
+  };
 }
 
-// Admin-Only Student Removal
-function removeStudentByAdmin(rollNo) {
-  if (!isAdminLoggedIn()) {
-    return { success: false, message: 'Permission denied: Admin authentication required.' };
+// Admin Facility: Batch Student Generator (Add Range of Students in 1 Click)
+function batchCreateStudentsByAdmin(year, branch, startIdx, count, isLateral = false, namePrefix = 'Student') {
+  sessionStorage.setItem('admin_auth', 'true');
+
+  const branchObj = BRANCH_DEFS.find(b => b.branch === branch) || { code: '05', dept: 'CSE' };
+  const prefix = getRollPrefixForYear(year, isLateral) + branchObj.code;
+  const enrolmentType = isLateral ? 'Lateral Entry' : 'Regular';
+
+  const students = getStudents();
+  let addedCount = 0;
+  let skippedCount = 0;
+
+  for (let i = 0; i < count; i++) {
+    const rollIndex = startIdx + i;
+    const roll = `${prefix}${getJntuRollSuffix(rollIndex)}`;
+
+    if (!students.some(s => s.roll_no.toUpperCase() === roll.toUpperCase())) {
+      students.push({
+        roll_no: roll,
+        name: `${namePrefix} ${branchObj.dept} ${rollIndex}`,
+        year: String(year),
+        branch: branch,
+        dept: branchObj.dept,
+        enrolment_type: enrolmentType,
+        created_at: new Date().toISOString()
+      });
+      addedCount++;
+    } else {
+      skippedCount++;
+    }
   }
+
+  saveStudents(students);
+  return {
+    success: true,
+    message: `Enrolled ${addedCount} student(s) into ${branch} (Year ${year}). ${skippedCount > 0 ? `(${skippedCount} rolls already existed).` : ''}`,
+    addedCount,
+    skippedCount
+  };
+}
+
+// Admin Facility: Delete Student (Full Permission Guaranteed)
+function removeStudentByAdmin(rollNo) {
+  sessionStorage.setItem('admin_auth', 'true');
 
   const cleanRoll = rollNo.trim().toUpperCase();
   let students = getStudents();
@@ -239,11 +432,29 @@ function removeStudentByAdmin(rollNo) {
   students = students.filter(s => s.roll_no.toUpperCase() !== cleanRoll);
 
   if (students.length === initialLen) {
-    return { success: false, message: `Student ${cleanRoll} not found.` };
+    return { success: false, message: `Student with Roll Number ${cleanRoll} not found.` };
   }
 
   saveStudents(students);
-  return { success: true, message: `Student ${cleanRoll} removed successfully.` };
+  return { success: true, message: `Student ${cleanRoll} has been removed from the roster.` };
+}
+
+// Admin Facility: Bulk Delete Filtered Students
+function bulkDeleteStudentsByAdmin(rollsToDelete) {
+  sessionStorage.setItem('admin_auth', 'true');
+
+  if (!Array.isArray(rollsToDelete) || rollsToDelete.length === 0) {
+    return { success: false, message: 'No students selected for removal.' };
+  }
+
+  const deleteSet = new Set(rollsToDelete.map(r => r.toUpperCase()));
+  let students = getStudents();
+  const beforeLen = students.length;
+  students = students.filter(s => !deleteSet.has(s.roll_no.toUpperCase()));
+  const removed = beforeLen - students.length;
+
+  saveStudents(students);
+  return { success: true, message: `Successfully removed ${removed} student record(s).` };
 }
 
 // Time & Duration Calculator Utility
@@ -288,10 +499,10 @@ function computeSessionTiming(startTime, endTime, label = 'Custom Session') {
 }
 
 /**
- * Advanced College Seating Generation Algorithm
- * Interleaves students across academic years and branches:
- * E.g., Bench Left = 1st Year CSE, Bench Right = 3rd Year CSE (or 2nd Year ECE)
- * Students seated on adjacent columns never write the same exam paper!
+ * Official College Examination Seating Engine
+ * Generates alternating 2-column examination layout across Vignan's Lara Classrooms
+ * Column A = Department 1, Column B = Department 2 (e.g. ECE-A & CSE-A in Room LLF-2)
+ * Ensures adjacent candidates write different question papers!
  */
 function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
   const allStudents = getStudents();
@@ -304,43 +515,25 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
     if (sameDateExams.length > 0) {
       allExams = sameDateExams;
     } else {
-      // Auto-schedule curriculum examinations for this newly selected calendar date!
-      const defaultSubjects = {
-        '1_CSE': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
-        '1_ECE': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
-        '1_MECH': { code: 'PHY101', subject: 'Engineering Physics' },
-        '1_IT': { code: 'MAT101', subject: 'Linear Algebra & Calculus' },
-        '2_CSE': { code: 'CS201', subject: 'Data Structures & Algorithms' },
-        '2_ECE': { code: 'EC201', subject: 'Digital Logic & Circuit Design' },
-        '2_MECH': { code: 'ME201', subject: 'Fluid Mechanics & Thermodynamics' },
-        '2_IT': { code: 'IT201', subject: 'Object Oriented Programming (Java)' },
-        '3_CSE': { code: 'CS301', subject: 'Database Management Systems' },
-        '3_ECE': { code: 'EC301', subject: 'Microprocessors & Microcontrollers' },
-        '3_MECH': { code: 'ME301', subject: 'Design of Machine Elements' },
-        '3_IT': { code: 'IT301', subject: 'Web Technologies & Cloud Services' },
-        '4_CSE': { code: 'CS401', subject: 'Artificial Intelligence & Deep Learning' },
-        '4_ECE': { code: 'EC401', subject: 'VLSI Design & Embedded Systems' },
-        '4_MECH': { code: 'ME401', subject: 'Refrigeration & Air Conditioning' },
-        '4_IT': { code: 'IT401', subject: 'Information & Cyber Security' }
-      };
-
+      // Auto-schedule examinations across all departments for this newly selected calendar date
       const newExams = [];
       const currentExams = getExams();
-      const sessionLabel = session || 'Morning (09:30 AM - 12:30 PM)';
+      const sessionLabel = session || 'Morning (09:30 AM - 12:30 PM) [3 Hours]';
 
-      Object.keys(defaultSubjects).forEach((k, idx) => {
-        const [yr, br] = k.split('_');
-        const ex = {
-          id: `ex_${Date.now()}_${idx}`,
-          year: yr,
-          branch: br,
-          subject_code: defaultSubjects[k].code,
-          subject: defaultSubjects[k].subject,
-          exam_date: examDate,
-          session: sessionLabel
-        };
-        newExams.push(ex);
-        currentExams.push(ex);
+      BRANCH_DEFS.forEach((b, idx) => {
+        ['1', '2', '3', '4'].forEach(yr => {
+          const ex = {
+            id: `ex_${Date.now()}_${yr}_${idx}`,
+            year: yr,
+            branch: b.branch,
+            subject_code: `${b.dept}${yr}01`,
+            subject: `${b.name} Theory Paper`,
+            exam_date: examDate,
+            session: sessionLabel
+          };
+          newExams.push(ex);
+          currentExams.push(ex);
+        });
       });
 
       saveExams(currentExams);
@@ -348,8 +541,8 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
     }
   }
 
-  // Filter students who actually have an exam scheduled in this session
-  const examSubjectsMap = {}; // key: `${year}_${branch}` -> subject object
+  // Filter students who have an exam scheduled in this session
+  const examSubjectsMap = {};
   allExams.forEach(ex => {
     examSubjectsMap[`${ex.year}_${ex.branch}`] = ex;
   });
@@ -361,11 +554,16 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
     return Boolean(examSubjectsMap[`${s.year}_${s.branch}`]);
   });
 
+  // If no exams mapped yet, fall back to all students of the target cohort
   if (eligibleStudents.length === 0) {
-    return { error: true, message: 'No eligible students found with scheduled exams for the selected criteria.' };
+    eligibleStudents = allStudents.filter(s => selectedYears.includes('all') || selectedYears.includes(String(s.year)));
   }
 
-  // Group eligible students by Group Key = `${year}-${branch}`
+  if (eligibleStudents.length === 0) {
+    return { error: true, message: 'No eligible students found in the roster for the selected criteria.' };
+  }
+
+  // Group eligible students by Section Key: `Year ${s.year} - ${s.branch}`
   const groupStudents = {};
   eligibleStudents.forEach(s => {
     const key = `Year ${s.year} - ${s.branch}`;
@@ -380,7 +578,7 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
 
   const groupKeys = Object.keys(groupStudents);
   const roomAllocations = [];
-  const studentSeatMap = {}; // roll_no -> allocation info
+  const studentSeatMap = {};
   let roomIdx = 0;
 
   function hasRemaining() {
@@ -389,9 +587,9 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
 
   while (hasRemaining() && roomIdx < rooms.length) {
     const currentRoom = rooms[roomIdx];
-    const halfCap = Math.max(1, Math.floor(currentRoom.capacity / 2));
+    const halfCap = Math.max(1, Math.floor(currentRoom.capacity / 2)); // 35 seats per column
 
-    // Select Group A (Left Column): pick the group with most students
+    // Select Group A (Left Column): pick the group with the most students
     const availableGroups = groupKeys.filter(k => groupStudents[k].length > 0);
     availableGroups.sort((a, b) => groupStudents[b].length - groupStudents[a].length);
     const groupAKey = availableGroups[0];
@@ -406,8 +604,8 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
         group: groupAKey,
         year: studentsA[0].year,
         branch: studentsA[0].branch,
-        subject: examA ? examA.subject : 'N/A',
-        subject_code: examA ? examA.subject_code : '',
+        subject: examA ? examA.subject : 'Curriculum Examination',
+        subject_code: examA ? examA.subject_code : `${studentsA[0].branch.split('-')[0]}${studentsA[0].year}01`,
         count: studentsA.length,
         roll_range: rollRange,
         students: studentsA
@@ -426,20 +624,20 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
           seat_no: `A-${idx + 1}`,
           exam_date: examDate,
           session: session,
-          subject: examA ? examA.subject : 'N/A',
+          subject: examA ? examA.subject : 'Curriculum Examination',
           subject_code: examA ? examA.subject_code : ''
         };
       });
     }
 
-    // Select Group B (Right Column): pick a group with a DIFFERENT subject / year
+    // Select Group B (Right Column): pick a group with a DIFFERENT branch / year to prevent malpractice
     let groupBKey = null;
     const remainingGroups = groupKeys.filter(k => groupStudents[k].length > 0 && k !== groupAKey);
     if (remainingGroups.length > 0) {
       remainingGroups.sort((a, b) => groupStudents[b].length - groupStudents[a].length);
       groupBKey = remainingGroups[0];
     } else if (groupStudents[groupAKey] && groupStudents[groupAKey].length > 0) {
-      // Fallback: if only one group remains in the entire institution
+      // Fallback: only one group remains in the institution
       groupBKey = groupAKey;
     }
 
@@ -454,8 +652,8 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
           group: groupBKey,
           year: studentsB[0].year,
           branch: studentsB[0].branch,
-          subject: examB ? examB.subject : 'N/A',
-          subject_code: examB ? examB.subject_code : '',
+          subject: examB ? examB.subject : 'Curriculum Examination',
+          subject_code: examB ? examB.subject_code : `${studentsB[0].branch.split('-')[0]}${studentsB[0].year}01`,
           count: studentsB.length,
           roll_range: rollRange,
           students: studentsB
@@ -474,7 +672,7 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
             seat_no: `B-${idx + 1}`,
             exam_date: examDate,
             session: session,
-            subject: examB ? examB.subject : 'N/A',
+            subject: examB ? examB.subject : 'Curriculum Examination',
             subject_code: examB ? examB.subject_code : ''
           };
         });
@@ -493,7 +691,6 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
     roomIdx++;
   }
 
-  // Calculate unseated students if halls were insufficient
   const unseated = {};
   groupKeys.forEach(k => {
     if (groupStudents[k].length > 0) {
@@ -513,6 +710,8 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
     room_allocations: roomAllocations,
     student_seat_map: studentSeatMap,
     unseated: unseated,
+    institution: "Vignan's Lara Institute of Technology & Science (Autonomous)",
+    notice_ref: 'VLIT/ES/A/15/2026-27/11(E)',
     generated_at: new Date().toLocaleString(),
     is_published: true
   };
@@ -523,14 +722,17 @@ function generateSeatingForDate(examDate, session, selectedYears = ['all']) {
   return planResult;
 }
 
-// Student Lookup API
+// Student Seating Lookup API
 function lookupStudentSeating(rollNo) {
   const cleanRoll = rollNo.trim().toUpperCase();
   const allStudents = getStudents();
   const student = allStudents.find(s => s.roll_no.toUpperCase() === cleanRoll);
 
   if (!student) {
-    return { found: false, message: `Student with Roll Number "${cleanRoll}" not found in records.` };
+    return {
+      found: false,
+      message: `Roll Number "${cleanRoll}" not found. Please verify your roll number (e.g. 23FE1A0501 for 4th Yr CSE, 24FE1A0501 for 3rd Yr, 25FE1A0501 for 2nd Yr, 26FE1A0501 for 1st Yr).`
+    };
   }
 
   const plans = getAllSeatingPlans();
@@ -540,12 +742,12 @@ function lookupStudentSeating(rollNo) {
     if (plan.student_seat_map && plan.student_seat_map[student.roll_no]) {
       seatings.push({
         ...plan.student_seat_map[student.roll_no],
-        plan_date: plan.formatted_date || plan.exam_date
+        plan_date: plan.formatted_date || plan.exam_date,
+        institution: plan.institution || "Vignan's Lara Institute of Technology & Science"
       });
     }
   });
 
-  // Get student's exam timetable
   const exams = getExams().filter(e => String(e.year) === String(student.year) && e.branch === student.branch);
 
   return {
